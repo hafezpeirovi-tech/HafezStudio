@@ -19,3 +19,12 @@ AI-assisted professional video editing frontend for Adobe Premiere Pro and After
 umpy, cv2, pydub, ctranslate2 internally)
 - Local 
 8n integration.
+
+## Technical Stack & Integrations
+- **Electron:** Desktop application wrapper for the studio interface.
+- **Python Engine:** Backend execution for AI and processing tasks.
+- **Premiere Integration:** Integrates with Adobe Premiere for automated editing/rendering.
+- **Hermes Relation:** Integrates with the Hermes Video Automation stack for content processing.
+- **n8n Relation:** Orchestrated or triggered by local n8n workflows.
+- **Excluded AI Models:** Heavy AI models (.bin, .onnx, untime/models) and generated binaries (elease/, win-unpacked/) are strictly excluded from source control.
+- **Restore Requirements:** Cloning this repository requires separate manual downloads of the AI models to become fully operational.
