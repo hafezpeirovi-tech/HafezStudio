@@ -1,0 +1,49 @@
+﻿# Node
+node_modules/
+.npm/
+
+# Build Output
+release/
+release-*/
+win-unpacked/
+*.exe
+*.msi
+*.dll
+dist/
+**/dist/
+build/hermes-engine/
+build/ctranslate2/
+
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.so
+.test-deps/
+.test-deps-run/
+.venv/
+venv/
+.pytest_cache/
+
+# Runtime / Models
+runtime/models/
+runtime/tools/
+*.bin
+*.onnx
+
+# Cache / Logs / Temp
+temp/
+tmp/
+cache/
+*.tmp
+*.log
+.DS_Store
+.env
+.env.*
+*.env
+
+# Backups & Renders
+backups/
+proof/
+.artifacts/
+review_refs/

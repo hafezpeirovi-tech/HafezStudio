@@ -1,0 +1,17 @@
+{
+  "version": 5,
+  "stylePack": "signal-os",
+  "graphicDensity": "max",
+  "languageMode": "fa-en",
+  "fontFamily": "auto",
+  "titleFontName": "Auto Persian Display",
+  "titleFontWeight": 800,
+  "bodyFontName": "Auto Persian Text",
+  "bodyFontWeight": 400,
+  "preserveCamera1Audio": true,
+  "telegramAdapter": "n8n",
+  "telegramEnabled": true,
+  "aiProvider": "n8n",
+  "accent": "neon-green",
+  "glowIntensity": 0.72
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "glass",
+  "sources": [
+    {"id":"foslight-saas","role":"chapter-typography","core":true,"path":"D:/Download/Compressed/saas-text-animation-pack-2026-09-03-08-41-43-utc"},
+    {"id":"qss-gradient","role":"chapter-background","core":true,"path":"D:/Download/Compressed/saas-gradient-backgrounds-for-premiere-pro-2026-09-11-10-09-12-utc"},
+    {"id":"nitrozme-saas","role":"alternate-chapter-typography","core":false,"path":"D:/Download/Compressed/saas-text-animation-for-premiere-pro-2026-09-11-12-52-48-utc"},
+    {"id":"motionstate-liquid","role":"glass-data-cards","core":true,"path":"D:/Download/Compressed/liquid-glass-infographics-mogrt-2026-09-11-09-44-17-utc"},
+    {"id":"foslight-trendy","role":"important-words","core":true,"path":"D:/Download/Compressed/trendy-titles-pp-2026-09-11-02-51-57-utc_2"},
+    {"id":"vio-elegant","role":"alternate-charts","core":false,"path":"D:/Download/Compressed/elegant-infographic-scenes-for-premiere-pro-2026-09-12-07-03-00-utc"},
+    {"id":"melkor-counter","role":"alternate-counters","core":false,"path":"D:/Download/Compressed/number-counter-titles-mogrt-2026-09-11-03-11-52-utc"}
+  ]
+}

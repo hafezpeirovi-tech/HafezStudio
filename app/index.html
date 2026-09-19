@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self' data:;" />
+    <title>Hafez Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="icon-sprite" aria-hidden="true">
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z" /></symbol>
+      <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4" /><path d="M9 4v16M9 10h12" /></symbol>
+      <symbol id="i-podcast" viewBox="0 0 24 24"><circle cx="12" cy="11" r="3" /><path d="M8.6 15.4a6 6 0 1 1 6.8 0M6 18a9 9 0 1 1 12 0M12 14v7" /></symbol>
+      <symbol id="i-director" viewBox="0 0 24 24"><path d="m12 3 7 4v10l-7 4-7-4V7zM8.5 9.5 12 7.5l3.5 2v5L12 16.5l-3.5-2z" /></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3 1.3 4.2L17.5 9l-4.2 1.8L12 15l-1.3-4.2L6.5 9l4.2-1.8zM19 14l.7 2.3L22 17l-2.3.7L19 20l-.7-2.3L16 17l2.3-.7zM5 15l.6 1.8L7.5 18l-1.9.6L5 20.5l-.6-1.9-1.9-.6 1.9-.6z" /></symbol>
+      <symbol id="i-waveform" viewBox="0 0 24 24"><path d="M3 12h2l1.5-5 3 10 2.5-8 2.5 6 2-3H21" /></symbol>
+      <symbol id="i-boxes" viewBox="0 0 24 24"><path d="m8 4 4-2 4 2-4 2zM4 9l4-2 4 2-4 2zM12 9l4-2 4 2-4 2zM4 15l4-2 4 2-4 2zM12 15l4-2 4 2-4 2zM8 11v4M16 11v4M12 6v3M8 17v3M16 17v3" /></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1z" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2z" /></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5" /></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5h6l2 2h10v8.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="M3 7.5V6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1.5" /></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5" /><path d="M19 12a7 7 0 1 0-1.7 4.6" /></symbol>
+      <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" /></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="4" /><rect x="9" y="9" width="6" height="6" rx="1" /></symbol>
+    </svg>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="shell">
+      <aside class="sidebar glass">
+        <div class="brand">
+          <div class="brand-mark">
+            <img class="logo-on-dark" src="assets/hafez-monogram-on-dark.png" alt="" />
+            <img class="logo-on-light" src="assets/hafez-monogram-on-light.png" alt="" />
+          </div>
+          <div><strong>Hafez Studio</strong><small>Signal OS · Personal</small></div>
+        </div>
+        <div class="product-modes" role="tablist" aria-label="نوع تولید">
+          <button class="mode active" data-mode="youtube"><span><svg class="thin-icon"><use href="#i-play"></use></svg></span><b>YouTube</b><em>ACTIVE</em></button>
+          <button class="mode" data-mode="reels"><span><svg class="thin-icon"><use href="#i-layout"></use></svg></span><b>Reels</b><em>NEXT</em></button>
+          <button class="mode" data-mode="podcast"><span><svg class="thin-icon"><use href="#i-podcast"></use></svg></span><b>Podcast</b><em>LATER</em></button>
+        </div>
+        <nav>
+          <button class="nav active" data-view="director"><i><svg class="thin-icon"><use href="#i-director"></use></svg></i><span>Director</span></button>
+          <button class="nav" data-view="motion"><i><svg class="thin-icon"><use href="#i-sparkles"></use></svg></i><span>Motion Design</span></button>
+          <button class="nav" data-view="audio"><i><svg class="thin-icon"><use href="#i-waveform"></use></svg></i><span>Voice Lab</span></button>
+          <button class="nav" data-view="integrations"><i><svg class="thin-icon"><use href="#i-boxes"></use></svg></i><span>Integrations</span></button>
+          <button class="nav" data-view="settings"><i><svg class="thin-icon"><use href="#i-settings"></use></svg></i><span>Settings</span></button>
+        </nav>
+        <div class="system-card">
+          <div class="status-row"><span class="status-dot pulse"></span><span id="engineStatus">در حال بررسی Engine…</span></div>
+          <div class="mini-grid">
+            <span>Premiere<b id="premiereStatus">—</b></span>
+            <span>After Effects<b id="aeStatus">—</b></span>
+            <span>GPU<b id="gpuStatus">—</b></span>
+          </div>
+          <button id="doctorButton" class="ghost compact"><svg class="thin-icon"><use href="#i-refresh"></use></svg><span>بررسی دوباره</span></button>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div><p class="kicker" id="workspaceKicker">YOUTUBE · AI VIDEO OPERATING SYSTEM</p><h1 id="workspaceTitle">YouTube Director</h1></div>
+          <div class="top-actions"><span class="version">v0.3 · Local First</span><button id="themeButton" class="ghost theme-toggle" title="تغییر پوسته"><span class="theme-light">روشن</span><span class="theme-status"></span><i class="theme-icon"><svg class="thin-icon"><use href="#i-sun"></use></svg></i></button><button id="openOutput" class="ghost"><span>پوشه خروجی</span><svg class="thin-icon"><use href="#i-folder"></use></svg></button></div>
+        </header>
+
+        <section class="planned-workspace glass" id="plannedWorkspace" hidden>
+          <div class="planned-orbit"><span id="plannedIcon">▥</span></div>
+          <p class="kicker violet" id="plannedPhase">PHASE 02</p>
+          <h2 id="plannedTitle">Reels Studio</h2>
+          <p id="plannedCopy">پس از تأیید کامل پایپ‌لاین YouTube، موتور عمودی و ریتم مخصوص ریلز در این بخش فعال می‌شود.</p>
+          <div class="planned-steps"><span>9:16 Reframe</span><span>Hook First</span><span>Fast Captions</span><span>Loop Ending</span></div>
+          <strong>فعلاً تمرکز محصول روی تکمیل بی‌نقص YouTube است.</strong>
+        </section>
+
+        <div class="studio-view" data-youtube-view="director">
+        <section class="hero-grid youtube-only director-groups">
+          <article class="project glass director-group director-hero">
+            <div class="section-head"><div><p class="kicker">PROJECT READINESS · 01 <i></i></p><h2>آمادگی پروژه</h2></div><span class="chip">DIRECTOR</span></div>
+            <div class="director-hero-layout">
+              <div class="director-readiness">
+                <span>منابع آماده</span>
+                <strong><span id="directorReadinessValue">0</span><small>/2</small></strong>
+                <p id="directorReadinessCopy">دو فایل دوربین را انتخاب کن تا پروژه آمادهٔ تدوین شود.</p>
+              </div>
+              <div class="director-source-stack">
+                <button class="dropzone" id="cam1Picker">
+                  <span class="cam-index">CAM 01</span><span class="drop-icon"><svg class="thin-icon"><use href="#i-plus"></use></svg></span>
+                  <strong>دوربین اصلی و صدای میکروفون</strong><small id="cam1Path">برای انتخاب کلیک کن</small>
+                </button>
+                <button class="dropzone secondary" id="cam2Picker">
+                  <span class="cam-index">CAM 02</span><span class="drop-icon"><svg class="thin-icon"><use href="#i-plus"></use></svg></span>
+                  <strong>زاویه دوم</strong><small id="cam2Path">برای انتخاب کلیک کن</small>
+                </button>
+                <div class="audio-rule"><svg class="thin-icon"><use href="#i-music"></use></svg><em>صدای دوربین دوم هوشمند خاموش می‌ماند</em><span>CAM ONLY</span><b>VOICE SOURCE</b></div>
+              </div>
+            </div>
+            <div class="director-hero-footer">
+              <p><svg class="thin-icon"><use href="#i-sparkles"></use></svg><span>با یکپارچگی کامل دوربین و Motion Design در زمان ویرایش صرفه‌جویی می‌شود.</span></p>
+              <div class="run-row"><button id="cancelButton" class="ghost danger" disabled><span>توقف</span><svg class="thin-icon"><use href="#i-stop"></use></svg></button><button id="startButton" class="run"><i><svg class="thin-icon"><use href="#i-arrow-right"></use></svg></i><span>شروع تدوین حرفه‌ای</span></button></div>
+            </div>
+          </article>
+
+          <article class="controls glass director-group director-settings">
+            <div class="section-head"><span class="live-badge">ADAPTIVE<i></i></span><h2>تنظیمات کارگردانی</h2></div>
+            <input id="stylePack" type="hidden" value="signal-os" />
+            <label>پروفایل پردازش<select id="performanceProfile"><option value="maximum">حداکثر توان · GPU First</option><option value="adaptive">هوشمند · Adaptive</option><option value="balanced">متعادل · کم‌مصرف</option></select></label>
+            <label>تراکم موشن<select id="graphicDensity"><option value="balanced">متعادل · خلوت</option><option value="dense">حرفه‌ای · استاندارد</option><option value="max">پر جزئیات · Maximum</option></select></label>
+            <label>زبان گفتار<select id="languageMode"><option value="fa-en">فارسی + اصطلاحات انگلیسی</option><option value="fa">فقط فارسی</option><option value="auto">تشخیص خودکار</option></select></label>
+            <div class="range-row"><span>شدت Glow</span><output id="glowValue" for="glowIntensity">82%</output><input id="glowIntensity" type="range" min="0" max="100" step="1" value="82" aria-label="Adaptive intensity" aria-valuetext="82%" /></div>
+            <div class="feature-pills"><span>Complete Sentences</span><span>Flowcharts</span><span>Face Safe-Zone</span><span>Semantic Zooms</span></div>
+          </article>
+        </section>
+
+        <section class="timeline glass youtube-only director-group director-pipeline">
+          <div class="section-head"><h2>مسیر تولید</h2><span class="pipeline-kicker">PIPELINE · 02<i></i></span><div class="pipeline-status"><strong id="progressValue">۰٪</strong><span id="currentStageLabel">آماده برای شروع</span></div><span id="jobBadge" class="chip muted">READY</span></div>
+          <div class="pipeline" aria-label="مراحل تدوین">
+            <div class="stage" data-stage="analyze"><i>01</i><span><b>Analyze</b><small>Sync · Silence · Transcript</small></span></div>
+            <div class="connector" data-connector="analyze"></div><div class="stage" data-stage="direct"><i>02</i><span><b>Direct</b><small>Camera · Zoom · Story</small></span></div>
+            <div class="connector" data-connector="direct"></div><div class="stage" data-stage="design"><i>03</i><span><b>Design</b><small>MOGRT · Flow · Data</small></span></div>
+            <div class="connector" data-connector="design"></div><div class="stage" data-stage="finish"><i>04</i><span><b>Finish</b><small>Premiere · Audio · Package</small></span></div>
+          </div>
+          <div class="progress" id="progressTrack" role="progressbar" aria-label="پیشرفت تدوین" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressBar"></span></div>
+          <div class="console-wrap"><span class="console-label">LIVE ACTIVITY</span><div class="console" id="console" aria-live="polite"><span>Hafez Studio آماده است.</span></div></div>
+          <div class="job-summary" id="jobSummary" hidden>
+            <div><small>SUBTITLE</small><b id="summarySubtitles">0</b><span>کپشن</span></div>
+            <div><small>MOTION</small><b id="summaryGraphics">0</b><span>موشن</span></div>
+            <div><small>PUNCH-IN</small><b id="summaryPunches">0</b><span>زوم معنایی</span></div>
+            <div><small>CAMERA</small><b id="summaryCameras">0</b><span>کات دوربین</span></div>
+            <p id="summaryKinds"></p>
+            <button id="openPlan" class="ghost">نمایش برنامهٔ Premiere / MOGRT</button>
+          </div>
+        </section>
+        </div>
+
+        <section class="studio-view tool-view glass motion-workspace" data-youtube-view="motion" hidden>
+          <div class="tool-hero">
+            <div><p class="kicker violet">MOTION DESIGN · LIVE PREVIEW LAB</p><h2>قبل از تدوین، نتیجه را ببین</h2><p>هر پروفایل، موشن، ریتم دوربین و تایپوگرافی را با یک جملهٔ کامل فارسی شبیه‌سازی کن؛ همین انتخاب‌ها در خروجی واقعی استفاده می‌شوند.</p></div>
+            <div class="tool-actions"><button id="openMotionPack" class="run compact-run">نمایش Motion Pack</button><button id="showAfterEffectsSource" class="ghost">فایل منبع After Effects</button></div>
+          </div>
+
+          <div class="preview-section-tabs" role="tablist" aria-label="بخش‌های پیش‌نمایش">
+            <button class="preview-section active" data-preview-section="profiles">پروفایل طراحی</button>
+            <button class="preview-section" data-preview-section="motions">موشن‌ها</button>
+            <button class="preview-section" data-preview-section="rhythm">ریتم تدوین</button>
+            <button class="preview-section" data-preview-section="typography">تایپوگرافی</button>
+          </div>
+
+          <div class="preview-lab">
+            <div class="preview-stage-wrap">
+              <div class="preview-stage profile-signal-os is-playing" id="previewStage" data-motion="statement" data-density="max">
+                <div class="preview-grid"></div><div class="preview-scan"></div>
+                <div class="preview-topline"><span>HAFEZ · DIRECTOR PREVIEW</span><b id="previewCamera">CAM 01 · HERO</b></div>
+                <div class="type-ghost preview-title-font" aria-hidden="true">DECISION</div>
+                <div class="preview-subject"><i></i><span></span></div>
+                <div class="face-safe"><span>FACE SAFE ZONE</span></div>
+
+                <div class="motion-layer motion-statement">
+                  <em>KEY INSIGHT</em><h3 class="preview-title-font word-lift"><span>این کار</span> <span>واقعاً زمانبره،</span> <span>ولی می‌شه</span> <span>خودکارش کرد.</span></h3><small class="preview-body-font">همون جمله‌ای که گفتی؛ کوتاه، عامیانه و واضح.</small>
+                </div>
+                <div class="motion-layer motion-keyword"><em>THE CORE IDEA</em><h3 class="preview-title-font">تحلیل درست</h3><small class="preview-body-font">همان چیزی که تصمیم را قابل اعتماد می‌کند.</small><i></i></div>
+                <div class="motion-layer motion-metric"><em>ANALYSIS CONFIDENCE</em><strong class="preview-title-font">۹۴٪</strong><small class="preview-body-font">دقت تحلیل</small></div>
+                <div class="motion-layer motion-flow"><em>THE WORKFLOW</em><h3 class="preview-title-font">مسیر کار از سیگنال تا نتیجه</h3><div><span class="preview-body-font"><b>01</b>سیگنال در تریدینگ‌ویو</span><i>↓</i><span class="preview-body-font"><b>02</b>ارسال به مدل لوکال هرمس</span><i>↓</i><span class="preview-body-font"><b>03</b>اجرا در متاتریدر</span><i>↓</i><span class="preview-body-font"><b>04</b>نمایش نتیجه در تلگرام</span></div></div>
+                <div class="motion-layer motion-chapter"><strong class="preview-title-font">۰۳</strong><div><em>CHAPTER · DECISION ENGINE</em><h3 class="preview-title-font">چطور یک تصمیم حرفه‌ای ساخته می‌شود؟</h3></div></div>
+                <div class="motion-layer motion-compare"><em>BEFORE / AFTER</em><h3 class="preview-title-font">تصمیم حدسی یا تصمیم داده‌محور؟</h3><div><span><b class="preview-title-font">حدس</b><small class="preview-body-font">کند و وابسته به احساس</small></span><span><b class="preview-title-font">تحلیل</b><small class="preview-body-font">شفاف، سریع و قابل تکرار</small></span></div></div>
+                <div class="motion-layer motion-corner"><em>FOCUS</em><h3 class="preview-title-font word-lift"><span>نکته‌ی اصلی</span> <span>دقیقاً همین‌جاست.</span></h3></div>
+                <div class="motion-layer motion-number"><em>EXECUTION LATENCY</em><strong class="preview-title-font">10 ms</strong><small class="preview-body-font">اختلافی که نتیجه رو عوض می‌کنه.</small></div>
+                <div class="motion-layer motion-depth"><em>BEHIND THE SUBJECT</em><h3 class="preview-title-font word-lift"><span>تصمیم</span> <span>درست</span></h3><small class="preview-body-font">تأکید عمقی با فضای امن سوژه</small></div>
+
+                <div class="rhythm-overlay"><span class="rhythm-cut">CAM 01</span><span class="rhythm-punch">SEMANTIC PUNCH · 112%</span><span class="rhythm-copy preview-body-font">نکتهٔ مهم، دقیقاً در لحظهٔ تأکید دیده می‌شود.</span></div>
+                <div class="preview-timeline"><i></i><span class="cut cut-a"></span><span class="cut cut-b"></span><span class="graphic-beat"></span></div>
+              </div>
+              <div class="preview-transport">
+                <button id="previewPlay" class="ghost compact-control">توقف</button>
+                <button id="previewReplay" class="ghost compact-control">بازپخش</button>
+                <button id="previewBefore" class="ghost compact-control">قبل / بعد</button>
+                <input id="previewScrub" type="range" min="0" max="100" value="28" aria-label="تایم‌لاین پیش‌نمایش" />
+                <output id="previewTime">00:01.7 / 00:06.0</output>
+              </div>
+            </div>
+
+            <aside class="preview-inspector">
+              <section class="preview-panel active" data-preview-panel="profiles">
+                <p class="kicker cyan">01 · DESIGN PROFILES</p><h3>هویت بصری ویدیو</h3>
+                <button class="profile-card active" data-profile="signal-os"><i></i><span><b>Signal OS</b><small>HUD، خطوط داده، Cyan/Violet و Glow پرانرژی</small></span><em>ACTIVE</em></button>
+                <button class="profile-card" data-profile="glass"><i></i><span><b>Glass · Native Review</b><small>SaaS روی گرادیانت هم‌رنگ · MOGRT واقعی · فونت موقت</small></span><em>VIEW</em></button>
+                <button class="profile-card" data-profile="luxury-tech"><i></i><span><b>Luxury Tech</b><small>مشکی و طلایی، سینمایی، لوکس و کنترل‌شده</small></span><em>VIEW</em></button>
+                <div class="live-tuners"><label>Glow <output id="previewGlowValue">82%</output><input id="previewGlow" type="range" min="0" max="100" value="82" /></label></div>
+              </section>
+
+              <section class="preview-panel" data-preview-panel="motions" hidden>
+                <p class="kicker violet">02 · MOTION PACK V2</p><h3>هر موشن را جدا پخش کن</h3>
+                <div class="motion-list">
+                  <button class="motion-choice active" data-motion="statement"><i>01</i><span><b>Word Lift Statement</b><small>ورود واژه‌ای + Blur + Liquid Glass</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="corner"><i>02</i><span><b>Face‑Safe Corner Note</b><small>کارت کوچک در فضای خالی قاب</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="number"><i>03</i><span><b>Big Number Reveal</b><small>عدد بزرگ با Bloom چندلایه</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="metric"><i>04</i><span><b>Glass HUD Metric</b><small>داده و KPI داخل شیشهٔ نرم و شفاف</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="flow"><i>05</i><span><b>Compact Flowchart</b><small>عمودی، دوخطی و بدون سرریز</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="chapter"><i>06</i><span><b>Chapter Billboard</b><small>شروع فصل در Bottom Dock</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="compare"><i>07</i><span><b>Split Compare</b><small>مقایسهٔ دو ایده بدون پوشاندن صورت</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="keyword"><i>08</i><span><b>Decision Depth</b><small>تایپ عمقی با Ghost Layer</small></span><em>▶</em></button>
+                  <button class="motion-choice" data-motion="depth"><i>09</i><span><b>Subject Occlusion</b><small>کلیدواژهٔ عمقی در فضای امن سوژه</small></span><em>▶</em></button>
+                </div>
+                <div class="motion-controls">
+                  <label>متن گرافیک<select id="copyMode"><option value="source-faithful">عین بیان من، بدون تغییر لحن</option><option value="grounded-summary">خلاصهٔ وفادار و قابل‌ردیابی</option></select></label>
+                  <label>سرعت Reveal<input id="revealSpeed" type="range" min="20" max="90" value="42" /><output id="revealSpeedValue">0.42s</output></label>
+                  <label>فاصله ورود<input id="liftDistance" type="range" min="20" max="80" value="50" /><output id="liftDistanceValue">50px</output></label>
+                  <label>Blur اولیه<input id="revealBlur" type="range" min="0" max="24" value="10" /><output id="revealBlurValue">10px</output></label>
+                  <label>Face Clearance<input id="faceClearance" type="range" min="8" max="28" value="16" /><output id="faceClearanceValue">16%</output></label>
+                  <label class="toggle-line"><input id="editableMogrtOnly" type="checkbox" checked /> فقط MOGRT قابل‌ویرایش در خروجی نهایی</label>
+                </div>
+              </section>
+
+              <section class="preview-panel" data-preview-panel="rhythm" hidden>
+                <p class="kicker gold">03 · EDIT RHYTHM</p><h3>ریتم هوشمند، نه اتفاق تصادفی</h3>
+                <div class="rhythm-cards">
+                  <article><i>CAM</i><span><b>تعویض دوربین</b><small>روی مرز جمله؛ فقط یک دوربین Enable است.</small></span></article>
+                  <article><i>112</i><span><b>Semantic Punch-in</b><small>در تغییر موضوع یا نکتهٔ مهم، با حفظ صورت.</small></span></article>
+                  <article><i>TXT</i><span><b>Graphic Beat</b><small>ورود متن کامل، بعد از کات و بدون پوشاندن چهره.</small></span></article>
+                  <article><i>▽</i><span><b>Breathing Space</b><small>وقفهٔ کنترل‌شده برای جلوگیری از خستگی بصری.</small></span></article>
+                </div>
+                <button id="playRhythm" class="run preview-run">پخش سناریوی ۶ ثانیه‌ای</button>
+              </section>
+
+              <section class="preview-panel" data-preview-panel="typography" hidden>
+                <p class="kicker cyan">04 · TYPOGRAPHY LAB</p><h3>دو نقش، دو انتخاب مستقل</h3>
+                <div class="font-picker-card title-font-card">
+                  <div><em>TITLE / DISPLAY</em><b id="titleFontName">Auto Persian Display</b><small id="titleFontPath">انتخاب هوشمند فونت فارسی</small></div>
+                  <div class="font-actions"><select id="titleFontWeight" aria-label="وزن فونت عنوان"><option value="600">SemiBold 600</option><option value="700">Bold 700</option><option value="800" selected>ExtraBold 800</option><option value="900">Black 900</option></select><button id="chooseTitleFont" class="ghost">انتخاب .ttf / .otf</button></div>
+                </div>
+                <div class="font-picker-card body-font-card">
+                  <div><em>BODY / STATEMENT</em><b id="bodyFontName">Auto Persian Text</b><small id="bodyFontPath">انتخاب هوشمند فونت فارسی</small></div>
+                  <div class="font-actions"><select id="bodyFontWeight" aria-label="وزن فونت متن"><option value="300">Light 300</option><option value="400" selected>Regular 400</option><option value="500">Medium 500</option><option value="600">SemiBold 600</option></select><button id="chooseBodyFont" class="ghost">انتخاب .ttf / .otf</button></div>
+                </div>
+                <div class="type-sample"><em>LIVE PERSIAN TYPE TEST</em><h4 class="preview-title-font">تحلیل درست، مسیر تصمیم را روشن می‌کند.</h4><p class="preview-body-font">متن‌های توضیحی با وزن متعادل، خوانایی بالا و فاصله‌گذاری مناسب نمایش داده می‌شوند.</p></div>
+                <div class="type-trend-grid">
+                  <span><i>W</i><b>Variable Weight</b><small>تأکید نرم 400→900</small></span>
+                  <span><i>T</i><b>Adaptive Tracking</b><small>جمع‌شدن فاصله با Ease</small></span>
+                  <span><i>↗</i><b>Editorial Scale</b><small>کنتراست تیتر و متن</small></span>
+                  <span><i>≈</i><b>Tactile Detail</b><small>عمق نوری تمیز و بدون Grain</small></span>
+                </div>
+                <div class="font-compat" id="fontCompatibility"><i>✓</i><span><b>Editable MOGRT Ready</b><small>برای ویرایش Font داخل MOGRT همان فونت باید روی سیستم Adobe نصب باشد.</small></span></div>
+                <button id="saveTypography" class="run preview-run">ذخیره تایپوگرافی این ویدیو</button>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="studio-view tool-view glass" data-youtube-view="audio" hidden>
+          <div class="tool-hero">
+            <div><p class="kicker cyan">VOICE LAB · CAM 01 ONLY</p><h2>Broadcast Warm Male v2</h2><p>پردازش شفاف و استودیویی فقط روی صدای میکروفون دوربین اول؛ صدای دوربین دوم وارد مستر نهایی نمی‌شود.</p></div>
+            <div class="voice-orb"><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="signal-chain">
+            <article><em>01</em><b>Clean</b><small>Noise floor analysis · rumble control</small></article>
+            <article><em>02</em><b>Shape</b><small>Warmth · presence · de-esser</small></article>
+            <article><em>03</em><b>Control</b><small>Compression · peak protection</small></article>
+            <article><em>04</em><b>Deliver</b><small>Loudness normalization · Premiere WAV</small></article>
+          </div>
+          <div class="tool-footer"><span><b>Source</b> Camera 01 External Microphone</span><span><b>Profile</b> Studio Clear + Warm Male</span><button id="openVoiceOutput" class="ghost">باز کردن خروجی‌ها</button></div>
+        </section>
+
+        <section class="studio-view tool-view glass" data-youtube-view="integrations" hidden>
+          <div class="tool-hero">
+            <div><p class="kicker gold">INTEGRATIONS · LOCAL BRIDGE</p><h2>اتصال‌های تدوین و اتوماسیون</h2><p>وضعیت ابزارهای Adobe و پل خصوصی Telegram/n8n از همین‌جا کنترل می‌شود.</p></div>
+            <button id="refreshIntegrations" class="ghost">بررسی دوباره</button>
+          </div>
+          <div class="integration-grid">
+            <article><i>Pr</i><span><b>Adobe Premiere Pro</b><small>XML + Editable CEP Finisher</small></span><em id="integrationPremiere">CHECKING</em></article>
+            <article><i>Ae</i><span><b>After Effects</b><small>Editable MOGRT Source</small></span><em id="integrationAE">CHECKING</em></article>
+            <article><i>n8n</i><span><b>n8n Local</b><small>Workflow Automation Bridge</small></span><em id="integrationN8n">CHECKING</em></article>
+            <article><i>TG</i><span><b>Private Telegram</b><small>Owner-only Remote Input</small></span><em id="integrationTelegram">CHECKING</em></article>
+          </div>
+          <div class="tool-footer"><span>اجرای مستقیم برنامه به Telegram وابسته نیست.</span><button id="showPremierePlugin" class="ghost">نمایش Premiere Plugin</button></div>
+        </section>
+
+        <section class="studio-view tool-view glass" data-youtube-view="settings" hidden>
+          <div class="tool-hero">
+            <div><p class="kicker violet">SETTINGS · LOCAL FIRST</p><h2>تنظیمات Hafez Studio</h2><p>تنظیمات روی همین سیستم ذخیره می‌شوند و همراه پروژه‌های خروجی قابل مدیریت‌اند.</p></div>
+            <button id="saveSettings" class="run compact-run">ذخیره تنظیمات</button>
+          </div>
+          <div class="settings-grid">
+            <label><span><b>پوشه خروجی</b><small>محل XML، زیرنویس، صدا و پکیج YouTube</small></span><div class="path-control"><input id="settingsOutput" readonly /><button id="chooseOutput" class="ghost">انتخاب</button></div></label>
+            <label><span><b>پوسته برنامه</b><small>انتخاب مستقل از تنظیمات ویندوز</small></span><select id="settingsTheme"><option value="dark">Dark Signal</option><option value="light">Light Studio</option></select></label>
+            <label><span><b>موتور پردازش</b><small>مدل فارسی و FFmpeg داخل نسخه قابل‌حمل</small></span><output id="settingsEngine">READY</output></label>
+            <label><span><b>حریم خصوصی</b><small>فایل‌ها روی سیستم باقی می‌مانند</small></span><output>LOCAL FIRST</output></label>
+          </div>
+          <p class="save-note" id="settingsNotice">تنظیمات آماده‌اند.</p>
+        </section>
+      </main>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
+</html>

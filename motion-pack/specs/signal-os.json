@@ -1,0 +1,43 @@
+{
+  "id": "signal-os",
+  "name": "Hafez Signal OS",
+  "version": 2,
+  "fps": 30,
+  "resolution": [1920, 1080],
+  "colors": {
+    "ink": "#020303",
+    "glass": "#0A0C0B",
+    "elevated": "#111412",
+    "white": "#FFFFFF",
+    "positive": "#55FF72",
+    "positiveSoft": "#2FD65B",
+    "danger": "#FF5964",
+    "muted": "#9DA5A0"
+  },
+  "effects": {
+    "glowCorePx": 4,
+    "glowMidPx": 34,
+    "glowBloomPx": 76,
+    "glassOpacity": 0.9,
+    "cardRadiusPx": 40,
+    "controlRadiusPx": 24,
+    "chromaticOffsetPx": 1.5,
+    "entryFrames": 9,
+    "overshoot": 1.045,
+    "exitFrames": 7
+  },
+  "typography": {
+    "persianPreferred": ["Abar High Regular", "Peyda", "Yekan Bakh", "Tahoma"],
+    "englishPreferred": ["Space Grotesk", "Inter", "Segoe UI Variable", "Arial"],
+    "persianMaxWords": 22,
+    "englishMaxWords": 5
+  },
+  "templates": [
+    "Hafez Neural Statement",
+    "Hafez Kinetic Keyword",
+    "Hafez HUD Metric",
+    "Hafez Flowchart 4 Step",
+    "Hafez Chapter Hero",
+    "Hafez Compare AB"
+  ]
+}

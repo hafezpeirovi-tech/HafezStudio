@@ -1,0 +1,58 @@
+﻿{
+  "protocol": "hafez-curated-sfx-v1",
+  "source_mode": "licensed-local-derived",
+  "generated_audio": false,
+  "sample_rate": 48000,
+  "channels": 2,
+  "true_peak_ceiling_dbfs": -12.0,
+  "voice_untouched": true,
+  "ducking_target": "background-music-only",
+  "sources": [
+    "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Text Animation\\Sound Effects\\Sound Effect_1.mp3",
+    "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Text Animation\\Sound Effects\\Sound Effect_2.mp3"
+  ],
+  "recipes": {
+    "hero-glass": {
+      "path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Hafez Motion SFX\\hafez-hero-glass.wav",
+      "duration": 0.86,
+      "layers": [
+        "soft-body",
+        "micro-transient",
+        "glass-settle"
+      ],
+      "transient_offset_ms": 0,
+      "settle_offset_ms": 245
+    },
+    "insight-air": {
+      "path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Hafez Motion SFX\\hafez-insight-air.wav",
+      "duration": 0.64,
+      "layers": [
+        "air-whoosh",
+        "glass-settle"
+      ],
+      "transient_offset_ms": 0,
+      "settle_offset_ms": 210
+    },
+    "process-ticks": {
+      "path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Hafez Motion SFX\\hafez-process-ticks.wav",
+      "duration": 0.72,
+      "layers": [
+        "micro-transient",
+        "process-pulse",
+        "glass-settle"
+      ],
+      "transient_offset_ms": 0,
+      "settle_offset_ms": 180
+    },
+    "metric-lock": {
+      "path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\personal-assets\\Hafez Motion SFX\\hafez-metric-lock.wav",
+      "duration": 0.56,
+      "layers": [
+        "soft-body",
+        "metric-click"
+      ],
+      "transient_offset_ms": 0,
+      "settle_offset_ms": 150
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "name": "hafez-studio",
+  "productName": "Hafez Studio",
+  "version": "0.3.0",
+  "private": true,
+  "description": "AI-assisted professional video editing for Adobe Premiere Pro and After Effects",
+  "main": "electron/main.js",
+  "author": "Hafez Studio",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "check": "node --check electron/main.js && node --check electron/preload.js && node --check app/renderer.js",
+    "dist:win": "electron-builder --win nsis --x64",
+    "pack:win": "electron-builder --win dir --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "ir.hafez.studio",
+    "productName": "Hafez Studio",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "app/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "engine/dist",
+        "to": "engine",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "premiere-plugin",
+        "to": "premiere-plugin",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "premiere-cep-plugin",
+        "to": "premiere-cep-plugin",
+        "filter": [
+          "**/*",
+          "!runtime{,/**/*}"
+        ]
+      },
+      {
+        "from": "motion-pack",
+        "to": "motion-pack",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "runtime",
+        "to": "runtime",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "personal-assets/Text Animation/Sound Effects/Sound Effect_1.mp3",
+        "to": "personal-assets/Text Animation/Sound Effects/Sound Effect_1.mp3"
+      },
+      {
+        "from": "personal-assets/Text Animation/Sound Effects/Sound Effect_2.mp3",
+        "to": "personal-assets/Text Animation/Sound Effects/Sound Effect_2.mp3"
+      },
+      {
+        "from": "personal-assets/Hafez Motion SFX/hafez-hero-glass.wav",
+        "to": "personal-assets/Hafez Motion SFX/hafez-hero-glass.wav"
+      },
+      {
+        "from": "personal-assets/Hafez Motion SFX/hafez-insight-air.wav",
+        "to": "personal-assets/Hafez Motion SFX/hafez-insight-air.wav"
+      },
+      {
+        "from": "personal-assets/Hafez Motion SFX/hafez-process-ticks.wav",
+        "to": "personal-assets/Hafez Motion SFX/hafez-process-ticks.wav"
+      },
+      {
+        "from": "personal-assets/Hafez Motion SFX/hafez-metric-lock.wav",
+        "to": "personal-assets/Hafez Motion SFX/hafez-metric-lock.wav"
+      },
+      {
+        "from": "config/defaults.json",
+        "to": "config/defaults.json"
+      },
+      {
+        "from": "config/brand-tokens.json",
+        "to": "config/brand-tokens.json"
+      },
+      {
+        "from": "config/editorial-element-catalog.json",
+        "to": "config/editorial-element-catalog.json"
+      },
+      {
+        "from": "config/glass-library.json",
+        "to": "config/glass-library.json"
+      },
+      {
+        "from": "config/glass-audio.json",
+        "to": "config/glass-audio.json"
+      },
+      {
+        "from": "personal-assets/Glass Audio",
+        "to": "personal-assets/Glass Audio",
+        "filter": ["**/*.mp3"]
+      },
+      {
+        "from": "config/motion-style-contract.json",
+        "to": "config/motion-style-contract.json"
+      },
+      {
+        "from": "app/assets/fonts",
+        "to": "fonts",
+        "filter": [
+          "**/*.ttf",
+          "**/*.otf"
+        ]
+      }
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "Hafez-Studio-${version}-${arch}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Hafez Studio",
+      "installerLanguages": [
+        "en_US"
+      ]
+    }
+  },
+  "allowScripts": {
+    "electron@39.8.10": true,
+    "electron-winstaller@5.4.0": true
+  }
+}

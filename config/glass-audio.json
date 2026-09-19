@@ -1,0 +1,16 @@
+{
+  "protocol": "hafez-local-glass-audio-v1",
+  "chapter_entry": {
+    "id": "foslight-saas-sfx-01",
+    "path": "personal-assets/Glass Audio/FosLight SaaS/SFX_01.mp3",
+    "sha256": "f0ba3ab5155c5519e28b754b85a75b76ec376a0b4a8458aca0bb7f21f76958fc",
+    "duration_seconds": 15.0,
+    "gain_db": -9,
+    "provenance": "SFX supplied inside owner-downloaded FosLight SaaS Text Animation Pack",
+    "audition_status": "requires-listening-review"
+  },
+  "music": null,
+  "download_allowed": false,
+  "voice_processing": "none",
+  "music_status": "awaiting-curated-local-choice"
+}

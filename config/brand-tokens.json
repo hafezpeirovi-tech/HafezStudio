@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "hafez-premium-neon",
+  "name": "Hafez Premium Dark · Neon Green",
+  "palette": {
+    "canvas": "#020303",
+    "surface": "#0A0C0B",
+    "surfaceElevated": "#111412",
+    "surfaceActive": "#142019",
+    "primaryAccent": "#55FF72",
+    "primaryAccentSoft": "#2FD65B",
+    "negativeAccent": "#FF5964",
+    "textPrimary": "#FFFFFF",
+    "textSecondary": "#9DA5A0",
+    "borderSubtle": "#FFFFFF0A"
+  },
+  "lightPalette": {
+    "canvas": "#F1F4F1",
+    "surface": "#FFFFFF",
+    "surfaceElevated": "#E8EDE9",
+    "surfaceActive": "#DDF8E3",
+    "primaryAccent": "#087A2A",
+    "primaryAccentSoft": "#18A845",
+    "negativeAccent": "#C72F3A",
+    "textPrimary": "#101411",
+    "textSecondary": "#657068",
+    "borderSubtle": "#1014111F"
+  },
+  "radius": {
+    "card": 40,
+    "control": 24,
+    "compact": 16,
+    "pill": 999
+  },
+  "glow": {
+    "intensity": 0.72,
+    "corePx": 4,
+    "radiusPx": 34,
+    "bloomPx": 76,
+    "outerAlpha": 0.28
+  },
+  "motion": {
+    "surfaceOpacity": 0.9,
+    "borderOpacity": 0.32,
+    "highlightGlow": 0.58,
+    "entryCurve": [0.16, 0.84, 0.22, 1.0],
+    "exitCurve": [0.4, 0.0, 0.2, 1.0]
+  },
+  "rules": {
+    "grainAllowed": false,
+    "inactiveUsesNegativeAccent": false,
+    "maximumLuminousCardsPerView": 2,
+    "templateFamilyLimit": 4
+  }
+}

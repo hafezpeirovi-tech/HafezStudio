@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "id": "hafez-motion-language-2026",
+  "brandTokenId": "hafez-premium-neon",
+  "designPrinciple": "The app UI and editorial graphics share one material, type, light and motion language.",
+  "material": {
+    "name": "Hafez Liquid Glass",
+    "surfaceToken": "surface",
+    "elevatedToken": "surfaceElevated",
+    "surfaceOpacity": 0.72,
+    "innerLightOpacity": 0.36,
+    "borderToken": "textPrimary",
+    "borderOpacity": 0.56,
+    "spectralEdgeToken": "primaryAccent",
+    "shadowBlurPx": 52,
+    "shadowOffsetPx": 14,
+    "backdropBlurPx": 22,
+    "backgroundDimOpacity": 0.91,
+    "ambientGlowOpacity": 0.32,
+    "rimLightOpacity": 0.74,
+    "cornerRadiusToken": "card",
+    "grainAllowed": false
+  },
+  "motion": {
+    "entryCurve": [0.16, 0.84, 0.22, 1.0],
+    "exitCurve": [0.4, 0.0, 0.2, 1.0],
+    "entryFrames": 18,
+    "settleFrames": 9,
+    "exitFrames": 12,
+    "liftPx": 42,
+    "blurPx": 9,
+    "maximumOvershootPercent": 1.5,
+    "linearAllowed": false,
+    "motionBlur": true
+  },
+  "typography": {
+    "englishDisplayFamily": "Relaxe",
+    "englishDisplayPostScript": "RelaxeHafez-Regular",
+    "afterEffectsDefaultPostScript": "Arial-BoldMT",
+    "premiereRelaxeOverrideRequired": true,
+    "afterEffectsCompatibilityStatus": "blocked-by-adobe-2026-font-crash",
+    "englishControl": "EN Display Title",
+    "persianControl": "FA Semantic Subtitle",
+    "layout": "large-en-small-fa-single-glass",
+    "persianScaleToEnglish": 0.39,
+    "maximumEnglishWords": 6,
+    "maximumPersianLines": 2,
+    "editorControls": {
+      "sourceText": true,
+      "customFontSelection": true,
+      "fontSizeAdjustment": true,
+      "englishFontSizeControl": "EN Font Size",
+      "persianFontSizeControl": "FA Font Size",
+      "englishFontPresetControl": "EN Font Preset",
+      "persianFontPresetControl": "FA Font Preset"
+    }
+  },
+  "families": {
+    "fullscreen-glass": {
+      "familyId": "hafez-fullscreen-glass",
+      "template": "Hafez Fullscreen Glass Focus.mogrt",
+      "baseSize": [1120, 430],
+      "semanticRoles": ["hook", "chapter", "claim", "hero-moment"],
+      "sfxRecipe": "hero-glass",
+      "coverage": "full-frame-takeover",
+      "variants": [
+        {
+          "id": "focus",
+          "template": "Hafez Fullscreen Glass Focus.mogrt",
+          "usage": ["hook", "title", "hero-moment"],
+          "defaultEnglishSize": 112,
+          "defaultPersianSize": 42
+        },
+        {
+          "id": "prism",
+          "template": "Hafez Fullscreen Glass Prism.mogrt",
+          "usage": ["claim", "statement", "insight"],
+          "defaultEnglishSize": 76,
+          "defaultPersianSize": 40
+        },
+        {
+          "id": "chapter-portal",
+          "template": "Hafez Fullscreen Glass Chapter.mogrt",
+          "usage": ["chapter", "section-break"],
+          "defaultEnglishSize": 78,
+          "defaultPersianSize": 38
+        }
+      ]
+    },
+    "insight-card": {
+      "familyId": "hafez-insight-card",
+      "template": "Hafez Word Lift Statement.mogrt",
+      "semanticRoles": ["statement", "keyword", "explanation"],
+      "sfxRecipe": "insight-air"
+    },
+    "process-flow": {
+      "familyId": "hafez-process-flow",
+      "template": "Hafez Compact Flowchart.mogrt",
+      "semanticRoles": ["flowchart", "process"],
+      "sfxRecipe": "process-ticks"
+    },
+    "metric-compare": {
+      "familyId": "hafez-metric-compare",
+      "template": "Hafez Glass HUD Metric.mogrt",
+      "semanticRoles": ["number", "hud", "compare"],
+      "sfxRecipe": "metric-lock"
+    }
+  },
+  "visualLimits": {
+    "maximumFamiliesPerVideo": 4,
+    "maximumLuminousCardsPerFrame": 2,
+    "maximumHeroMomentsPerMinute": 3,
+    "minimumSecondsBetweenHeroMoments": 14,
+    "vendorTemplateSkinAllowed": false,
+    "vendorTemplateChoreographyAllowed": true
+  },
+  "audio": {
+    "sampleRate": 48000,
+    "channels": 2,
+    "format": "pcm_s24le",
+    "truePeakCeilingDbfs": -12.0,
+    "duckingTarget": "background-music-only",
+    "voiceUntouched": true,
+    "recipes": {
+      "hero-glass": {
+        "duration": 0.86,
+        "transientOffsetMs": 0,
+        "settleOffsetMs": 245,
+        "layers": ["soft-body", "micro-transient", "glass-settle"]
+      },
+      "insight-air": {
+        "duration": 0.64,
+        "transientOffsetMs": 0,
+        "settleOffsetMs": 210,
+        "layers": ["air-whoosh", "glass-settle"]
+      },
+      "process-ticks": {
+        "duration": 0.72,
+        "transientOffsetMs": 0,
+        "settleOffsetMs": 180,
+        "layers": ["micro-transient", "process-pulse", "glass-settle"]
+      },
+      "metric-lock": {
+        "duration": 0.56,
+        "transientOffsetMs": 0,
+        "settleOffsetMs": 150,
+        "layers": ["soft-body", "metric-click"]
+      }
+    }
+  },
+  "provenance": {
+    "vendorPack": "text-animation-2026-08-13-06-42-05-utc.zip",
+    "vendorTimingReference": "05. Highlight (Cut Transition).mogrt",
+    "vendorVisualLayersEmbedded": false,
+    "generatedArtwork": false
+  }
+}
