@@ -50,5 +50,19 @@ assert.throws(function(){$._hafez.applyNativeScale(nativeItem,NaN);},/Invalid/);
 nativeScale.isTimeVarying=function(){return true;};
 assert.throws(function(){$._hafez.applyNativeScale(nativeItem,50);},/Animated/);
 assert.equal(nativeScale.value,70);
+var preservedItem={nodeId:'original',name:'camera',start:{ticks:'0'},end:{ticks:'10'},
+ inPoint:{ticks:'20'},outPoint:{ticks:'30'},disabled:false,projectItem:{getMediaPath:function(){return 'camera.mp4';}}};
+var ownerClips=[preservedItem];ownerClips.numItems=1;
+var ownerTrack={clips:ownerClips,isMuted:function(){return false;}};
+var ownerSequence={videoTracks:[ownerTrack],audioTracks:[]};
+var ownerSnapshot=[{kind:'video',index:0,muted:false,clips:[{nodeId:'original',name:'camera',
+ startTicks:'0',endTicks:'10',inTicks:'20',outTicks:'30',disabled:false,mediaPath:'camera.mp4'}]}];
+assert($._hafez.verifyExistingEdit(ownerSequence,ownerSnapshot,true));
+preservedItem.end.ticks='11';
+assert.throws(function(){$._hafez.verifyExistingEdit(ownerSequence,ownerSnapshot,false);},/Owner clip changed/);
+preservedItem.end.ticks='10';ownerClips.numItems=2;
+assert.throws(function(){$._hafez.verifyExistingEdit(ownerSequence,ownerSnapshot,true);},/Owner track changed/);
+ownerClips.numItems=1;
+assert.throws(function(){$._hafez.verifyExistingEdit(ownerSequence,[],true);},/Missing owner/);
 `, context);
 console.log('Glass bridge contract tests passed (typed controls, locks, ownership, duplicate protection).');

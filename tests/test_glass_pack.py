@@ -91,7 +91,17 @@ class GlassPackTests(unittest.TestCase):
         self.assertEqual(len(library['packages']),7)
 
     def test_per_control_font_override(self):
-        self.assertEqual(self.layer(fonts={'Text 1':'Tahoma'})['typed_controls'][0]['font'],'Tahoma')
+        font='AbarHighFaNum-ExtraBold'
+        self.assertEqual(self.layer(fonts={'Text 1':font})['typed_controls'][0]['font'],font)
+
+    def test_non_abar_font_cannot_reach_native_plan(self):
+        for font in ('Tahoma', 'ArialMT', '', 'Abar'):
+            with self.assertRaisesRegex(ValueError,'ABAR'):
+                self.layer(fonts={'Text 1':font})
+        plan=self.plan()
+        plan['graphics'][0]['template_layers'][0]['typed_controls'][0]['font']='Tahoma'
+        with self.assertRaisesRegex(ValueError,'ABAR'):
+            glass.validate_plan(plan,{'assets':[self.asset]},qa=True)
 
     def test_duplicate_and_unbound_text_rejected(self):
         for duplicate in (True, False):

@@ -26,6 +26,22 @@ class GlassEditorialTests(unittest.TestCase):
         r = self.proposal('این برنامه یک بخش گزارش هفتگی داره که مفیده.')
         self.assertEqual(r['chapters'][0]['quote_fa'], 'گزارش هفتگی')
 
+    def test_numbered_topic_keeps_literal_label(self):
+        for label in ('مشکل شماره‌ی دو، نداشتن دیتا، یک تفاوت',
+                      'موضوع شماره ۲: نداشتن دیتا.',
+                      'نکته شمارهٔ دو، نداشتن دیتا.'):
+            with self.subTest(label=label):
+                result = self.proposal(label)
+                self.assertEqual(result['chapters'][0]['quote_fa'], 'نداشتن دیتا')
+                self.assertEqual(result['chapters'][0]['proposal_origin'], 'numbered-topic')
+                self.assertEqual(result['policy']['chapter_gate'],
+                                 'retained-source-words-and-acoustic-caption-gap')
+
+    def test_numbered_topic_does_not_invent_missing_or_long_copy(self):
+        for text in ('مشکل شماره دو', 'مشکل شماره دو، ...',
+                     'مشکل شماره دو، نداشتن یک برنامه که برای همه موقعیت ها مناسب باشد.'):
+            self.assertFalse(self.proposal(text)['chapters'])
+
     def test_named_concept_is_not_a_fixed_domain_dictionary(self):
         r = self.proposal('به این روش می‌گن یادگیری فعال، یعنی تمرین کنیم.')
         self.assertEqual(r['chapters'][0]['quote_fa'], 'یادگیری فعال')

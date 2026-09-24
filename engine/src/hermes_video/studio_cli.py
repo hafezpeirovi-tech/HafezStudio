@@ -531,6 +531,7 @@ def build_parser() -> argparse.ArgumentParser:
     for option in ("manifest", "xml", "base-plan", "captions", "chapters", "output", "project"):
         glass_assemble.add_argument("--" + option, required=True)
     glass_assemble.add_argument("--source-sequence")
+    glass_assemble.add_argument('--storyboard',help='Source-bound, context-reviewed semantic decisions')
     glass_assemble.add_argument('--audio',action='store_true',help='Add bound local vendor SFX, never process dialogue')
     doctor_parser = subparsers.add_parser("doctor")
     doctor_parser.add_argument("--json", action="store_true")
@@ -580,10 +581,13 @@ def main() -> int:
                                      base_plan_path=args.base_plan, captions_path=args.captions,
                                      requests_path=args.chapters, output_dir=args.output,
                                      project_path=args.project, source_sequence=args.source_sequence,
-                                     include_audio=args.audio)
+                                     include_audio=args.audio,
+                                     storyboard=json.loads(Path(args.storyboard).read_text(encoding='utf-8-sig')) if args.storyboard else None)
             _json_print({"ok": True, "status": report["status"], "output": args.output,
                          "chapters": len(report["selected_chapters"]),
                          "rejected": len(report["rejected_chapters"]),
+                         "contentCards": len(report['selected_cutaways']),
+                         "editableMogrtLayers": report['native_mogrt_instances_planned'],
                          "publicationReady": False, "premiereImportRequired": True})
             return 0
         if args.command == "glass-validate":

@@ -47,11 +47,20 @@ def main():
     plan = json.loads((folder / 'Glass-Director.premiere-plan.json').read_text(encoding='utf-8-sig'))
     for index in (2, 3):
         rows = project.fingerprints('Video', index)
-        assert len(rows) == 1 and rows[0]['name'].startswith('Hafez Glass glass-intro ')
-        assert rows[0]['start'] == 0 and rows[0]['end'] == 180 * ticks_per_frame
+        expected_layers = [(cue, layer_index) for cue in plan['graphics']
+                           for layer_index, layer in enumerate(cue['template_layers'])
+                           if layer['track'] == index]
+        assert len(rows) == len(expected_layers), 'Saved graphics count differs from plan'
+        for row, (cue, layer_index) in zip(rows, expected_layers):
+            assert row['name'] == 'Hafez Glass ' + cue['id'] + ' L' + str(layer_index)
+            assert row['start'] == round(cue['start'] * TICKS)
+            assert abs(row['end'] - round(cue['end'] * TICKS)) <= 2
     sfx = project.fingerprints('Audio', 3)
-    assert len(sfx) == 1 and sfx[0]['name'] == 'Glass-SaaS-entry-180f.wav'
-    assert sfx[0]['start'] == 0 and sfx[0]['end'] == 180 * ticks_per_frame
+    assert len(sfx) == len(plan['sfx_cues'])
+    for row, cue in zip(sfx, plan['sfx_cues']):
+        assert row['start'] == cue['start_frame'] * ticks_per_frame
+        assert row['end'] == cue['end_frame'] * ticks_per_frame
+        assert row['name'] == Path(cue['asset_path']).name
     assert not project.items('Audio', 2) and not project.items('Audio', 4)
     srt = (folder / 'Glass-Director.srt').read_text(encoding='utf-8-sig').strip()
     cues = re.split(r'\n\s*\n', srt)
@@ -63,6 +72,7 @@ def main():
         h, m, s, ms = map(int, re.split('[:,]', value))
         return ((h * 3600 + m * 60 + s) * 1000 + ms) * TICKS // 1000
     max_error = 0
+    caption_timing_issues = []
     binary_payloads = {n.get('BinaryHash'): base64.b64decode(n.text)
                        for n in project.root.iter('FormattedTextData') if n.text and n.text.strip()}
     for cue, caption, item in zip(cues, captions, timeline):
@@ -73,7 +83,10 @@ def main():
             assert int(caption.findtext('Time' + label)) == expected
             actual = int(item.findtext('DataClipTrackItem/ClipTrackItem/TrackItem/' + label))
             error = abs(actual - expected)
-            assert error <= ticks_per_frame, 'Subtitle shifted by more than one display frame'
+            if error > ticks_per_frame:
+                caption_timing_issues.append(dict(cue=int(lines[0]), boundary=label,
+                    expected_seconds=expected / TICKS, actual_seconds=actual / TICKS,
+                    error_frames=error / ticks_per_frame))
             max_error = max(max_error, error)
         # Premiere stores formatted caption text in a FlatBuffer; verify the complete
         # exact UTF-8 caption is present, not merely an approximate text match.
@@ -85,14 +98,20 @@ def main():
             assert expected_text in payload, 'Saved caption text differs from source SRT'
     digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
     report = dict(status='saved-native-structure-verified', project=str(project_path), project_sha256=digest(project_path),
-                  sequence_id=native['sequence_id'], source_edits_verified=counts, mogrt_instances=2,
+                  sequence_id=native['sequence_id'], source_edits_verified=counts, mogrt_instances=sum(len(c['template_layers']) for c in plan['graphics']),
                   native_caption_count=len(cues), source_srt_sha256=digest(folder / 'Glass-Director.srt'),
                   caption_text_exact=True, max_caption_quantization_frames=max_error / ticks_per_frame,
-                  sfx=dict(track='A4', start_frame=0, end_frame=180), source_audio_timing_exact=True,
+                  sfx=dict(track='A4', cues=len(sfx), all_frame_ranges_verified=True), source_audio_timing_exact=True,
                   png_graphic_count=0, publication_ready=False, asr_verified_by_this_script=False, full_playback_qa=False)
+    report['caption_timing_issues'] = caption_timing_issues
+    report['ok'] = not caption_timing_issues
+    if caption_timing_issues:
+        report['status'] = 'saved-native-caption-timing-review-required'
     with (folder / args.receipt_name).open('x', encoding='utf-8') as stream:
         json.dump(report, stream, indent=2)
     print(json.dumps(report, indent=2))
+    if caption_timing_issues:
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,138 @@
+[
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\__init__.py",
+    "Hash": "9CDAFDDE4F97C9D80BA46C82BC596A08AA94AE9385F399994849F5E3B6EF6D90"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\asr_recovery.py",
+    "Hash": "5D099401D67F81C19F44D93E37101C719500D16DEF0E98281AEEF89191C825A3"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\audio_master.py",
+    "Hash": "D4EDEBBEB63625C94C76B1D2F1F739FF1A404B5AB5A8CFFA4D3EA78F9D41CE7E"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\autocut.py",
+    "Hash": "7567FEBE790CA509BC4B21A653950809DE6CD7361FF0153E0604659A9CB45703"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\body_tracking.py",
+    "Hash": "7534733655C3A4161D0C05E7C163D783E2531C640A90C3BA7379701D0D47F86D"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\brand_tokens.py",
+    "Hash": "60A24A6F0BEED3C77D72B97D25AF71F6DF8DF798391255D60C63E9AF6A2FC46C"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\caption_context.py",
+    "Hash": "9B5A2CBEFFE58BDA8FB4811F758A9DC5037632B363F17A22E7D2BA45E009C657"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\caption_evidence.py",
+    "Hash": "8AC405614B914476B2890F39351616A30EE3D05A1ABE392FAF6EF51088669280"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\caption_layout.py",
+    "Hash": "C336D85032D34398A5F7D9D12EF9A4035017A19E015887F2D1DE06F6C48DA22F"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\caption_provenance.py",
+    "Hash": "1C225022FF6F7EA25C9E53FE979ADF5DFDCF89E6F0476B745CCB46C58BA34766"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\caption_timing.py",
+    "Hash": "EC0037596439E0F7C69CB5425F909BB0172D498AEFE843E99A304BF2714E597E"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\chapter_timeline.py",
+    "Hash": "9307635D70BF640F7363502C54CF2694F33C708BD676C3EE9876BB435384C709"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\curation_rules.py",
+    "Hash": "03FF4B1996944EEA885A637065AFC5C221814E1FBB481089852CA6CF333FE19C"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\editorial_elements.py",
+    "Hash": "5BB6F89BC59D2C4420032EB38776EF695BE187940DE00D226F113B194928A598"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_assembly.py",
+    "Hash": "79CD4EA3C95552B799F85EE8869BEAD10F830AA7567F2A0DAFC7BD92397FE5C5"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_audio.py",
+    "Hash": "1B4919F29D2A4D44BBA06999295D0F38D317E756A0237B2E3525411224E4843A"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_editorial.py",
+    "Hash": "894D49A717D4C050F304843F09A3F4DC432C1740A0AA05E6E724827D11DA9FE1"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_finalize.py",
+    "Hash": "38ABF383B88AF05FA542C80AB931B182EE2C68BEE124E5B5DA5D1A9F9878A69A"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_pack.py",
+    "Hash": "C3C5D49B1B17C81B7250668B8B041C533465C41EE7593A0FD592646FEB0E447F"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_semantic_cards.py",
+    "Hash": "DB4B73F7182731B6B5085A3E7CD9F04A4EC98B484581F68A9E866496561CB342"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\glass_storyboard.py",
+    "Hash": "660DE00484FC36391F443D086D26208F6376A71548B21C727C329CFBD74ACEFA"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\graphic_framing.py",
+    "Hash": "22FCDA427B22D85CEC330B0D910CAEFE41DE3D7886F38F69F918040B32230890"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\motion_style.py",
+    "Hash": "75880CE2005A4E0E3896AFCCFB04ABDE2754C0FCE1ADE185FA35C6DB3A6818CA"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\professional_edit.py",
+    "Hash": "CEE0FA8BACC65AD9BEE9EF6F49969E8390D9EADE59B40888BEEB9A44548EC873"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\rough_cut.py",
+    "Hash": "B9863A66829E7A150D3440D29011B40B044B29F5E62FD61372C4FAA33D0C1551"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\runtime_paths.py",
+    "Hash": "CF92C8C96D6E79AD7F160587C77BCA1CE8256D096D5527ABCBE3BF824F2F4BDA"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\smart_crop.py",
+    "Hash": "5E32A1B170D8DA7BB323BDEFF94E54B5F86D0726B107290461DC5FC8DD9E798F"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\sound_design.py",
+    "Hash": "7DFB76C61EBECDD0D9CC339062BABE19659CCD95CA38CA3F78862859D2825D35"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\spatial_audit.py",
+    "Hash": "55C58A4A926909476889E6EF8C37ED3EC94443F89947DD359FE05464FADE016F"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\speech_padding.py",
+    "Hash": "9E6D83DED747581ADB2542AFE1075480FBB850F6A451B15060FC175BBDD83B44"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\spoken_trigger.py",
+    "Hash": "5E22872563182C5E3312B11F0B7EDB61A5F6B5BB845CDE2D8534668FAF5DBC90"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\studio_cli.py",
+    "Hash": "429B10579AA726E43E3CEAD633F0B3DE8A4EB027227DE707EE1F85645DCC672F"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\subtitle_pipeline.py",
+    "Hash": "0A2EB443E4FB22F82064AF8DD73C63C82BEFEF706F41E75FEEFB09126B9B9501"
+  },
+  {
+    "Path": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\engine\\src\\hermes_video\\word_boundary_guard.py",
+    "Hash": "196CCA9E2BC0C92692E07BF587474D2FE8CE96634B8F0AF55274E2B90B75B62E"
+  }
+]

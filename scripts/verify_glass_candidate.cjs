@@ -9,10 +9,13 @@ const { spawnSync } = require("child_process");
 const asar = require("@electron/asar");
 const root = path.resolve(__dirname, "..");
 const revision = process.argv[2] || '01';
-assert(/^\d{2}$/.test(revision), 'Invalid isolated candidate revision');
-const candidate = path.join(root, `release-glass-candidate-20260913-${revision}`, "win-unpacked");
+const semantic = revision === 'semantic-20260923-01';
+assert(semantic || /^\d{2}$/.test(revision), 'Invalid isolated candidate revision');
+const candidate = path.join(root, semantic ? 'release-semantic-candidate-20260923-01' : `release-glass-candidate-20260913-${revision}`, "win-unpacked");
 const resources = path.join(candidate, "resources");
-const output = path.join(root, "proof", revision === '01' ? "glass-candidate-20260913-02" : `glass-candidate-${revision}-verification-20260913`);
+const attempt = process.argv[3] || '01';
+assert(/^\d{2}$/.test(attempt), 'Invalid verification attempt');
+const output = path.join(root, "proof", semantic ? `semantic-desktop-verification-20260923-${attempt}` : revision === '01' ? "glass-candidate-20260913-02" : `glass-candidate-${revision}-verification-20260913`);
 const hash = bytes => crypto.createHash("sha256").update(bytes).digest("hex");
 const fileHash = p => hash(fs.readFileSync(p));
 const readJson = p => JSON.parse(fs.readFileSync(p, "utf8").replace(/^\uFEFF/, ""));
@@ -62,7 +65,7 @@ function main() {
   report.chapterSfxVerified = true;
   const engine = path.join(resources, "engine/hermes-engine/hermes-engine.exe");
   report.engineSha256 = fileHash(engine);
-  assert.equal(report.engineSha256, fileHash(path.join(root,`engine/glass-candidate-20260913-${revision}/dist/hermes-engine/hermes-engine.exe`)));
+  assert.equal(report.engineSha256, fileHash(path.join(root, semantic ? 'engine/semantic-candidate-20260923-02/dist/hermes-engine/hermes-engine.exe' : `engine/glass-candidate-20260913-${revision}/dist/hermes-engine/hermes-engine.exe`)));
   function frozen(name, args) {
     const result = spawnSync(engine, args, {cwd:output, encoding:"utf8", timeout:120000, windowsHide:true,
       env:{...process.env,PYTHONUTF8:"1"}});
@@ -74,7 +77,7 @@ function main() {
   }
   report.glassStatus = frozen("glass-status", ["glass-status"]);
   report.doctor = frozen("doctor", ["doctor","--json"]);
-  const oldPlan = path.join(root,"proof/glass-finalize-20260913-03/F_Hafez_Youtube_8rdvid_C2963.glass-review/Glass-Director.premiere-plan.json");
+  const oldPlan = path.join(root, semantic ? 'proof/automatic-semantic-glass-20260923-05/frozen-package/Glass-Director.premiere-plan.json' : "proof/glass-finalize-20260913-03/F_Hafez_Youtube_8rdvid_C2963.glass-review/Glass-Director.premiere-plan.json");
   const plan = readJson(oldPlan);
   plan.expected_project_path = path.join(output,"NOT-DISPATCHED.prproj");
   for (const cue of plan.graphics) for (const layer of cue.template_layers) {

@@ -177,15 +177,18 @@ def chapter_layers(library, fa, en, root):
         color_tokens={'BG Color 01':'accent','BG Color 02':'accentLight','BG Color 03':'surface',
                       'BG Color 04':'background','BG Color 05':'background','Dust Color 01':'background'})
     title=typed_layer(asset('foslight-saas','SaaS Pack Title 01'),
-                     text={'Text 1':en or fa,'Text 2':fa if en else ''},track=3,root=root,
-                     fonts={'Text 1':'ArialMT' if en else 'Tahoma','Text 2':'Tahoma'},
+                     # This template animates Text 1 then Text 2, not two static
+                     # lines. Blanking phase two leaves an empty title card.
+                     text={'Text 1':en or fa,'Text 2':fa},track=3,root=root,
+                     fonts={'Text 1':'AbarHighFaNum-ExtraBold','Text 2':'AbarHighFaNum-SemiBold'},
                      sizes={'Text 1':140,'Text 2':100},values={'Glow Radius':200})
     title['native_motion_scale']=65
     return [bg,title]
 
 
 def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, requests_path,
-                    output_dir, project_path, source_sequence=None, root=None, include_audio=False):
+                    output_dir, project_path, source_sequence=None, root=None, include_audio=False,
+                    storyboard=None):
     root=Path(root or studio_root()); output=Path(output_dir).resolve()
     project=Path(project_path).resolve()
     if output.exists() or project.parent != output or project.suffix.lower()!='.prproj':
@@ -234,6 +237,15 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
         graphics.append(dict(id=chapter['id'],start=float(Fraction(slot['start_frame'])/rate),
                              end=float(Fraction(slot['end_frame'])/rate),chapter_source=chapter,
                              template_layers=chapter_layers(library,chapter['quote_fa'],chapter['title_en'],root)))
+    from glass_semantic_cards import select_cutaways, cutaway_layers
+    cutaways, blocked_cutaways = select_cutaways(storyboard or {},mapped_word_spans(context),mapping,
+        occupied=[(s['start_frame'],s['end_frame']) for s in mapping.payload()['insertions']])
+    for card in cutaways:
+        graphics.append(dict(id=card['id'],start=float(Fraction(card['start_frame'])/rate),
+            end=float(Fraction(card['end_frame'])/rate),semantic_source=card,
+            layout_mode='fullscreen-voice-continuous',
+            template_layers=cutaway_layers(library,card['display_text'],root)))
+    graphics.sort(key=lambda c:c['start'])
     plan=dict(protocol='hermes-professional-edit-v2',style_pack='glass',purpose='isolated-native-qa',
               expected_project_path=str(project),sequence=seq_name,fps=float(rate),palette=DEFAULT_PALETTE,
               video_tracks=dict(cam1=0,cam2=1,mogrt_background=2,mogrt=3),graphics=graphics,
@@ -241,10 +253,10 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
               punch_ins=mapping.timed_items(base_plan.get('punch_ins',[])),sfx_cues=[],
               timeline_mapping=mapping.payload(),publication_ready=False,
               native_sequence_requirements={'composite_in_linear_color':False,'verification':'requires-native-check'},
-              font_selection='provisional-until-owner-choice',
+              font_selection='owner-approved-ABAR-High-FaNum',
               audio_policy=dict(voice_untouched_by_ducking=True,ducking_target='background-music-only',
                                 background_music_present=False,ducking_applied=False),
-              review_required=['final fonts','chapter listening/semantic review','native timing/compositing QA','curated music/SFX'])
+              review_required=['ABAR native rendering','chapter listening/semantic review','native timing/compositing QA','curated music/SFX'])
     validate_plan(plan,library,qa=True,root=root)
     after={str(p):sha256(p) for p in paths}
     if before!=after:raise RuntimeError('Input changed during assembly')
@@ -252,6 +264,7 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
     report=dict(status='editable-review-package-not-publication',source_identity=audit,
                 frame_preservation=preservation,insertions=mapping.payload(),
                 selected_chapters=chosen,rejected_chapters=rejected,inputs_sha256=before,
+                selected_cutaways=cutaways,rejected_cutaways=blocked_cutaways,
                 original_subtitle_cues=len(captions),output_subtitle_cues=len(mapped_captions),
                 native_mogrt_instances_planned=len(graphics)*2,native_instances_inserted=0,
                 original_files_changed=False,publication_ready=False)
@@ -263,7 +276,8 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
                               translations_withheld=sum(bool(c.get('proposed_translation')) for c in editorial['chapters']))
     if include_audio:
         from glass_audio import attach_entries
-        plan['sfx_cues'] = attach_entries(rewritten, mapping.payload(), output, root)
+        entrances=sorted([*mapping.payload()['insertions'],*cutaways],key=lambda c:c['start_frame'])
+        plan['sfx_cues'] = attach_entries(rewritten, {'insertions':entrances}, output, root)
         plan['audio_tracks'] = dict(cam1=0, cam2=1, reserved=2, sfx=3, music=4)
         plan['audio_policy'].update(sfx_source='local-FosLight-SaaS-vendor',
                                     sfx_count=len(plan['sfx_cues']), music_status='awaiting-local-choice')

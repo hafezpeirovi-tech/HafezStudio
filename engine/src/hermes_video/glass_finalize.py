@@ -63,10 +63,15 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
     captions=stage/'Director-source.srt'
     captions.write_text(srt_text(cues),encoding='utf-8')
     requests=stage/'chapter-proposals.json'
+    from glass_storyboard import review_with_local_ai, review_meaning
+    storyboard=review_with_local_ai(manifest['review_segments'],checkpoint=stage/'semantic-checkpoint.json')
+    storyboard=review_meaning(storyboard,manifest['review_segments'])
+    (stage/'semantic-storyboard.json').write_text(json.dumps(storyboard,ensure_ascii=False,indent=2),encoding='utf-8')
     requests.write_text(json.dumps(chapter_proposals(markers),ensure_ascii=False,indent=2),encoding='utf-8')
     report=assemble_review(manifest_path=source_manifest,xml_path=xml_path,base_plan_path=base_plan,
                            captions_path=captions,requests_path=requests,output_dir=output,
-                           project_path=output/'Hafez-Glass-Review.prproj',root=root,include_audio=True)
+                           project_path=output/'Hafez-Glass-Review.prproj',root=root,include_audio=True,
+                           storyboard=storyboard)
     # Fresh chapter timestamps only. Never copy stale timestamps from the old cut.
     chapter_lines=[]
     rate=Fraction(*report['insertions']['fps'])
@@ -89,6 +94,13 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
     review_manifest['glass_source_manifest']=str(source_manifest)
     review_manifest['glass_caption_timing']=timing_audit
     review_manifest['glass_camera_backend']=backend
+    review_manifest['glass_storyboard_path']=str(stage/'semantic-storyboard.json')
+    review_manifest['glass_storyboard_counts']={
+        'source_bound_proposals':len(storyboard['proposals']),
+        'rejected':len(storyboard['rejected']),
+        'compiled_cutaways':len(report['selected_cutaways']),
+        'blocked_cutaways':len(report['rejected_cutaways']),
+        'nonchapter_layout_pending':sum(p['role'] not in ('chapter','important-text') for p in storyboard['proposals'])}
     # Commit the routing manifest last. Failure leaves the old manifest intact.
     temporary=original.with_name(original.name+'.glass-new')
     with temporary.open('x',encoding='utf-8') as stream:
@@ -137,9 +149,18 @@ def validate_review_outputs(manifest, *, root=None):
     ranges=[(s['start_frame'],s['end_frame']) for s in payload['insertions']]
     graphics=[(round(Fraction(str(c['start']))*rate),round(Fraction(str(c['end']))*rate))
               for c in plan['graphics']]
-    if graphics!=ranges or any(sorted(layer['track'] for layer in c['template_layers'])!=[2,3]
+    chapter_graphics=[g for g,c in zip(graphics,plan['graphics']) if c.get('layout_mode')!='fullscreen-voice-continuous']
+    if chapter_graphics!=ranges or any(sorted(layer['track'] for layer in c['template_layers'])!=[2,3]
                               for c in plan['graphics']):
         raise ValueError('Glass cards do not occupy exact standalone slots')
+    for i,(a,b) in enumerate(graphics):
+        if not 0<=a<b<=mapping.output_duration or (i and a<graphics[i-1][1]):
+            raise ValueError('Overlapping/out-of-range Glass cards')
+        card=plan['graphics'][i]
+        if card.get('layout_mode')=='fullscreen-voice-continuous':
+            evidence=card.get('semantic_source',{})
+            if (evidence.get('start_frame'),evidence.get('end_frame'))!=(a,b) or not evidence.get('source_word_ids'):
+                raise ValueError('Unbound semantic card')
     for cue in captions:
         a,b=round(Fraction(str(cue['start']))*rate),round(Fraction(str(cue['end']))*rate)
         if not 0<=a<b<=mapping.output_duration or any(a<d and b>c for c,d in ranges):
@@ -155,10 +176,10 @@ def validate_review_outputs(manifest, *, root=None):
         last=b
     if last!=mapping.output_duration:raise ValueError('Incomplete Glass camera coverage')
     cues=plan.get('sfx_cues',[])
-    if [(c['start_frame'],c['end_frame']) for c in cues]!=ranges:
+    if [(c['start_frame'],c['end_frame']) for c in cues]!=graphics:
         raise ValueError('Missing/duplicate composite entry SFX')
     for cue in cues:
-        if sha256(Path(cue['asset_path']))!=cue['sha256'] or (cue['start_frame'],cue['end_frame']) not in ranges:
+        if sha256(Path(cue['asset_path']))!=cue['sha256'] or (cue['start_frame'],cue['end_frame']) not in graphics:
             raise ValueError('SFX identity/sync mismatch')
     from glass_audio import validate_entries
     validate_entries(seq,plan)

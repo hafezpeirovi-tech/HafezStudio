@@ -339,6 +339,24 @@ $._hafez.inspectTimeline = function (requestJson) {
         report.sequence_id = String(sequence.sequenceID);
         report.frameSize = [sequence.frameSizeHorizontal, sequence.frameSizeVertical];
         report.timebase = String(sequence.timebase);
+        // Read-only source clocks for finishing an owner's already edited sequence.
+        // Never reconstruct its cuts from an older engine XML.
+        report.sourceTracks = [];
+        for (var mediaIndex = 0; mediaIndex < 2; mediaIndex++) {
+            var sourceTracks = mediaIndex === 0 ? sequence.videoTracks : sequence.audioTracks;
+            for (var sourceTrackIndex = 0; sourceTrackIndex < sourceTracks.numTracks; sourceTrackIndex++) {
+                var sourceTrack = sourceTracks[sourceTrackIndex], sourceClips = [];
+                for (var sourceClipIndex = 0; sourceClipIndex < sourceTrack.clips.numItems; sourceClipIndex++) {
+                    var sourceClip = sourceTrack.clips[sourceClipIndex];
+                    sourceClips.push({nodeId:String(sourceClip.nodeId), name:String(sourceClip.name),
+                        startTicks:String(sourceClip.start.ticks), endTicks:String(sourceClip.end.ticks),
+                        inTicks:String(sourceClip.inPoint.ticks), outTicks:String(sourceClip.outPoint.ticks),
+                        mediaPath:String(sourceClip.projectItem.getMediaPath()), disabled:sourceClip.disabled});
+                }
+                report.sourceTracks.push({kind:mediaIndex === 0 ? "video" : "audio", index:sourceTrackIndex,
+                    muted:sourceTrack.isMuted(), clips:sourceClips});
+            }
+        }
         for (var t = 0; t < sequence.videoTracks.numTracks; t++) {
             var track = sequence.videoTracks[t];
             report.videoTracks.push({index:t, clips:track.clips.numItems, muted:track.isMuted()});
@@ -466,6 +484,28 @@ $._hafez.importXmlRequest = function (requestJson) {
     return $._hafez.stringify(report);
 };
 
+$._hafez.verifyExistingEdit = function(sequence, tracks, exactCount) {
+    if (!(tracks instanceof Array) || !tracks.length) throw Error("Missing owner edit snapshot");
+    for (var t=0;t<tracks.length;t++) {
+        var saved=tracks[t], collection=saved.kind==="video" ? sequence.videoTracks : sequence.audioTracks;
+        if ((saved.kind!=="video" && saved.kind!=="audio") || !collection[saved.index]) throw Error("Owner track missing");
+        var track=collection[saved.index];
+        if (track.isMuted()!==saved.muted || (exactCount && track.clips.numItems!==saved.clips.length)) throw Error("Owner track changed");
+        for(var i=0;i<saved.clips.length;i++) {
+            var old=saved.clips[i], found=null;
+            for(var j=0;j<track.clips.numItems;j++) if(String(track.clips[j].nodeId)===old.nodeId) {
+                if(found) throw Error("Ambiguous owner clip");
+                found=track.clips[j];
+            }
+            if(!found || String(found.start.ticks)!==old.startTicks || String(found.end.ticks)!==old.endTicks ||
+                String(found.inPoint.ticks)!==old.inTicks || String(found.outPoint.ticks)!==old.outTicks ||
+                String(found.name)!==old.name || found.disabled!==old.disabled ||
+                String(found.projectItem.getMediaPath())!==old.mediaPath) throw Error("Owner clip changed: "+old.nodeId);
+        }
+    }
+    return true;
+};
+
 $._hafez.applyPlan = function (path, muteGuide) {
     // inserted remains the compatible count of fully verified active items,
     // not the number of import attempts or disabled partial results.
@@ -485,6 +525,22 @@ $._hafez.applyPlan = function (path, muteGuide) {
             throw new Error("Track رزروشده V" + (plannedMogrtIndex + 1) + " برای MOGRT پیدا نشد؛ XML جدید را import کن.");
         }
         var graphics = plan.graphics || [];
+        if (plan.preserve_existing_tracks) {
+            if (muteGuide) throw Error("Cannot mute owner tracks");
+            $._hafez.verifyExistingEdit(sequence,plan.preserve_existing_tracks,true);
+            // Preflight ALL planned intervals before the first native import.
+            for(var pg=0;pg<graphics.length;pg++) {
+                var pc=graphics[pg], pl=pc.template_layers || [];
+                for(var pi=0;pi<pl.length;pi++) {
+                    var pt=sequence.videoTracks[pl[pi].track];
+                    if(!pt) throw Error("Missing reserved review track");
+                    for(var pj=0;pj<pt.clips.numItems;pj++) {
+                        if(pt.clips[pj].start.seconds<pc.end && pt.clips[pj].end.seconds>pc.start)
+                            throw Error("Review overlaps owner graphic; no overwrite");
+                    }
+                }
+            }
+        }
         var expectedMogrtCount = 0;
         for (var countIndex = 0; countIndex < graphics.length; countIndex++) {
             var countLayers = graphics[countIndex].template_layers;
@@ -635,8 +691,10 @@ $._hafez.applyPlan = function (path, muteGuide) {
             result.messages.push("V" + (guideIndex + 1) + " راهنما Mute شد؛ Track مستقل MOGRT فعال است.");
         }
         result.ok = result.failed === 0 && result.inserted === expectedMogrtCount;
+        if(plan.preserve_existing_tracks) result.existingEditPreserved=$._hafez.verifyExistingEdit(sequence,plan.preserve_existing_tracks,false);
         result.messages.push("پروژه عمداً Save نشد؛ پس از بازبینی خودت ذخیره کن.");
     } catch (error) {
+        result.ok = false;
         result.failed++;
         result.messages.push("خطای Finisher: " + error.message);
     }

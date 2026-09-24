@@ -23,6 +23,8 @@ TYPES = {1: "boolean", 2: "scalar", 3: "scalar", 4: "color", 5: "point",
 DEFAULT_PALETTE = {"id": "smoked-emerald", "background": "#060B09",
                    "surface": "#14291F", "accent": "#43E878",
                    "accentLight": "#B0F6CB", "text": "#F3F7F4", "muted": "#B5C9BE"}
+ABAR_FONTS = frozenset('AbarHighFaNum-' + weight for weight in
+                      ('Regular', 'SemiBold', 'Bold', 'ExtraBold', 'Black'))
 
 
 def sha256(path: Path) -> str:
@@ -175,6 +177,8 @@ def typed_layer(asset: Mapping, *, text: Mapping[str, str], track: int,
                 raise ValueError("Unresolved text must not be rendered")
             binding["value"] = value
             control_font = fonts.get(name, font)
+            if control_font not in ABAR_FONTS:
+                raise ValueError("Glass requires an explicit ABAR High FaNum font: " + name)
             if control_font:
                 if not control["font"].get("capPropFontEdit"):
                     raise ValueError("Font is locked: " + name)
@@ -212,6 +216,8 @@ def _validate_binding(binding: Mapping, control: Mapping) -> None:
         if not isinstance(value, str) or "…" in value or "..." in value:
             raise ValueError("Unresolved/invalid text binding")
         font = binding.get("font", "")
+        if font not in ABAR_FONTS:
+            raise ValueError("Glass requires an explicit ABAR High FaNum font")
         if not isinstance(font, str) or (font and not control.get("font", {}).get("capPropFontEdit")):
             raise ValueError("Unsupported native font")
         if "fontSize" in binding:
@@ -307,7 +313,7 @@ def capability_report(library: Mapping | None = None) -> dict:
     library = library or load_library()
     assets = library["assets"]
     return {"style": "glass", "assets": len(assets), "packages": library["packages"],
-            "fontSelection": library.get("fontSelection", "pending"),
+            "fontSelection": "owner-approved-ABAR-High-FaNum",
             "nativeApproved": sum(a.get("nativeQA", {}).get("status") == "approved" and
                                   a["nativeQA"].get("sha256") == a["sha256"] for a in assets),
             "fontLockedAssets": sum(bool(a.get("fontLocked")) for a in assets),
@@ -317,7 +323,7 @@ def capability_report(library: Mapping | None = None) -> dict:
             "ordinaryRunIntegration": "opt-in-review-only",
             "reviewCommand": "run/finalize --style glass --glass-review",
             "packagedAppDeployed": False,
-            "remaining": ["owner font selection and native font/render QA",
+            "remaining": ["ABAR native font/render QA",
                           "fresh source-bound chapter review and packaged-app integration",
                           "vendor SFX audition, curated music choice and end-to-end review"],
             "palette": library["palette"], "downloadAllowed": False}
@@ -328,7 +334,7 @@ def prompt_summary(library: Mapping | None = None) -> str:
     lines = ["Glass: local vendor MOGRT only; one shared palette; at most 4 families; no invented data."]
     for pack in library["packages"]:
         lines.append(f"{pack['id']} | {pack['role']} | {pack['count']} assets | {'core' if pack['core'] else 'optional'}")
-    lines.append("Availability is not native approval. Subscribe Glass is not selected. Persian font is provisional.")
+    lines.append("Availability is not native approval. Subscribe Glass is not selected. All generated text uses ABAR High FaNum.")
     lines.append("Selectable native review candidates (NOT publication-approved):")
     lines.extend(json.dumps(item, ensure_ascii=False) for item in planning_catalog(library))
     lines.append("Chapter = standalone SaaS over matching gradient BEFORE camera, not over a face. "

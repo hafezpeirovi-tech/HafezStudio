@@ -28,7 +28,7 @@ function defaultOutputRoot() {
   return path.join(app.getPath("videos"), "Hafez Studio Outputs");
 }
 
-const CONFIG_VERSION = 7;
+const CONFIG_VERSION = 8;
 
 function brandTokensPath() {
   return path.join(resourceRoot(), "config", "brand-tokens.json");
@@ -85,7 +85,7 @@ function defaultConfig() {
   return {
     version: CONFIG_VERSION,
     outputRoot: defaultOutputRoot(),
-    stylePack: "signal-os",
+    stylePack: "glass",
     performanceProfile: "maximum",
     graphicDensity: "balanced",
     languageMode: "fa-en",
@@ -119,6 +119,12 @@ function loadConfig() {
     try {
       const saved = JSON.parse(fs.readFileSync(candidate, "utf8"));
       const merged = { ...defaults, ...saved, version: CONFIG_VERSION };
+      // Pre-Glass installations silently retained the old hidden Signal OS
+      // default. Move that legacy default to the owner's approved vendor pack.
+      // Explicit choices saved by this version (and other styles) are preserved.
+      if (Number(saved.version || 0) < 8 && (!saved.stylePack || saved.stylePack === "signal-os")) {
+        merged.stylePack = "glass";
+      }
       const hasAdaptiveValue = Object.prototype.hasOwnProperty.call(saved, "adaptiveValue");
       const savedAdaptiveValue = Number(saved.adaptiveValue);
       const legacyGlowIntensity = Number(saved.glowIntensity);

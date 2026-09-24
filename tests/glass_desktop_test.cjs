@@ -15,11 +15,26 @@ function fixture() {
     require: name => name==="electron" ? {app,BrowserWindow:Window,ipcMain:{handle:(n,f)=>handlers[n]=f},dialog:{},shell:{}} : name==="child_process" ? {spawn} : name==="./glass-finisher" ? broker : name==="./job-recovery" ? {findPreparedJob:(...args)=>{calls.push({recovery:args});return null;}} : require(name)});
   vm.runInContext(fs.readFileSync("electron/main.js", "utf8"), ctx);
   const payload={cam1:path.join(root,"cam1.mp4"),cam2:path.join(root,"cam2.mp4"),config:{outputRoot:path.join(root,"out"),stylePack:"glass",performanceProfile:"balanced"}};
-  return {handlers,events,spawns,calls,preflights,accept,reject,payload,offline:()=>preflightFailure=true};
+  return {handlers,events,spawns,calls,preflights,accept,reject,payload,ctx,root,offline:()=>preflightFailure=true};
 }
 function engineComplete(x, code=0) { const c=x.spawns[0].child; c.stdout.emit("data", Buffer.from('HERMES_STAGE finish 100 XML ready\n'+JSON.stringify({event:"completed",summary:{style:"glass",publicationReady:false}})+'\n'));c.emit("close",code); }
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 (async()=>{
+  let configFixture=fixture();
+  const configFile=path.join(configFixture.root,'userData','settings.json');
+  fs.mkdirSync(path.dirname(configFile),{recursive:true});
+  assert.equal(vm.runInContext('loadConfig().stylePack',configFixture.ctx),'glass');
+  for (const [saved,expected] of [
+    [{version:7,stylePack:'signal-os'},'glass'],
+    [{version:7},'glass'],
+    [{version:7,stylePack:'grunge'},'grunge'],
+    [{version:8,stylePack:'signal-os'},'signal-os'],
+    [{version:8,stylePack:'glass'},'glass']
+  ]) {
+    fs.writeFileSync(configFile,JSON.stringify(saved));
+    assert.equal(vm.runInContext('loadConfig().stylePack',configFixture.ctx),expected);
+    assert.deepEqual(JSON.parse(fs.readFileSync(configFile)),saved,'Loading does not overwrite owner settings');
+  }
   let x=fixture();x.handlers["job:start"](null,x.payload);
   assert.equal(x.preflights.length,1);assert(x.spawns[0].args.includes("--glass-review"));
   assert.equal(x.calls[0].recovery[3],"glass");assert.equal(x.spawns[0].options.env.HERMES_PRESERVE_CAMERA1_AUDIO,"1");
