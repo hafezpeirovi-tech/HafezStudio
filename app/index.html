@@ -7,7 +7,7 @@
     <title>Hafez Studio</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-shell="studio">
     <svg class="icon-sprite" aria-hidden="true">
       <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z" /></symbol>
       <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4" /><path d="M9 4v16M9 10h12" /></symbol>
@@ -41,6 +41,7 @@
           <button class="mode active" data-mode="youtube"><span><svg class="thin-icon"><use href="#i-play"></use></svg></span><b>YouTube</b><em>ACTIVE</em></button>
           <button class="mode" data-mode="reels"><span><svg class="thin-icon"><use href="#i-layout"></use></svg></span><b>Reels</b><em>NEXT</em></button>
           <button class="mode" data-mode="podcast"><span><svg class="thin-icon"><use href="#i-podcast"></use></svg></span><b>Podcast</b><em>LATER</em></button>
+          <button class="mode" data-mode="upscale"><span><svg class="thin-icon"><use href="#i-sparkles"></use></svg></span><b>Upscale</b><em>LOCAL AI</em></button>
         </div>
         <nav>
           <button class="nav active" data-view="director"><i><svg class="thin-icon"><use href="#i-director"></use></svg></i><span>Director</span></button>
@@ -276,6 +277,21 @@
           <div class="tool-footer"><span>اجرای مستقیم برنامه به Telegram وابسته نیست.</span><button id="showPremierePlugin" class="ghost">نمایش Premiere Plugin</button></div>
         </section>
 
+        <section class="studio-view tool-view glass" data-workspace="upscale" hidden>
+          <div class="tool-hero"><div><p class="kicker">LOCAL AI · QUALITY FIRST</p><h2>جزئیات بیشتر؛ با بازبینی خودت</h2><p>SeedVR2 3B FP16 · فایل اصلی حفظ می‌شود · بدون آپلود ویدیو</p></div><button id="upRefresh" class="ghost">بررسی نصب</button></div>
+          <p id="upInstalled" role="status">در حال بررسی محیط مستقل…</p>
+          <div class="settings-grid">
+            <label><span><b>ویدیوی ورودی</b><small>Rec.709 SDR · 8/10-bit · نرخ فریم ثابت · خروجی ProRes HQ ده‌بیتی؛ HDR پشتیبانی نمی‌شود.</small></span><div class="path-control"><input id="upInput" readonly /><button id="upChoose" class="ghost">انتخاب</button></div></label>
+            <label><span><b>ضلع کوتاه خروجی</b><small>نسبت تصویر حفظ می‌شود؛ 4K نیازمند آزمون حافظه است.</small></span><select id="upResolution"><option value="720">720</option><option value="1080" selected>1080</option><option value="1440">1440</option><option value="2160">2160 · 4K landscape</option></select></label>
+            <label><span><b>شروع نمونه (ثانیه)</b><small>پیش‌نمایش پنج‌ثانیه‌ای برای بررسی صورت، نوشته و لرزش بافت</small></span><input id="upStart" type="number" min="0" step="0.1" value="0" /></label>
+            <label><span><b>بازبینی نمونه (اختیاری)</b><small>برای پردازش کامل الزامی نیست. مدل ممکن است جزئیات را تغییر دهد؛ خروجی را بازبینی کن.</small></span><span><input id="upConfirm" type="checkbox" /> نمونهٔ همین تنظیمات را بررسی کردم.</span></label>
+          </div>
+          <div class="tool-footer"><button id="upPreview" class="run">ساخت نمونهٔ ۵ ثانیه‌ای</button><button id="upFull" class="ghost" disabled>پردازش کامل فایل</button><button id="upCancel" class="ghost" disabled>توقف</button><button id="upOpen" class="ghost" disabled>نمایش فایل‌ها</button></div>
+          <p id="upStatus" role="status">پردازش کامل را مستقیم شروع کن یا در صورت تمایل نمونه بساز؛ Upscale مستقل از تدوین است.</p>
+          <progress id="upProgress" max="100" value="0"></progress>
+          <p id="upCompareLabel" hidden>چپ: ورودی · راست: SeedVR2 — تصویر ثابت برای مقایسه؛ حرکت را در فایل ویدیویی بررسی کن.</p>
+          <img id="upComparison" hidden alt="مقایسهٔ قبل و بعد از Upscale" />
+        </section>
         <section class="studio-view tool-view glass" data-youtube-view="settings" hidden>
           <div class="tool-hero">
             <div><p class="kicker violet">SETTINGS · LOCAL FIRST</p><h2>تنظیمات Hafez Studio</h2><p>تنظیمات روی همین سیستم ذخیره می‌شوند و همراه پروژه‌های خروجی قابل مدیریت‌اند.</p></div>
@@ -292,5 +308,6 @@
       </main>
     </div>
     <script src="renderer.js"></script>
+    <script src="upscale.js"></script>
   </body>
 </html>

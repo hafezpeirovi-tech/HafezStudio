@@ -255,6 +255,15 @@ function selectView(view) {
 function selectMode(mode) {
   state.mode = mode;
   document.querySelectorAll(".mode").forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
+  if (mode === "upscale") {
+    document.body.dataset.view = "upscale";
+    document.querySelectorAll(".nav").forEach(button => button.classList.remove("active"));
+    $("#plannedWorkspace").hidden = true;
+    document.querySelectorAll(".studio-view").forEach(panel => { panel.hidden = panel.dataset.workspace !== "upscale"; });
+    $("#workspaceKicker").textContent = "INDEPENDENT LOCAL AI · QUALITY FIRST";
+    $("#workspaceTitle").textContent = "Video Upscale";
+    return;
+  }
   const youtube = mode === "youtube";
   if (youtube) {
     selectView(state.view);

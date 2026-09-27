@@ -7,6 +7,7 @@ const os = require("os");
 const path = require("path");
 const { findPreparedJob } = require("./job-recovery");
 const glassFinisher = require("./glass-finisher");
+const { UpscaleManager } = require("./upscale");
 
 let mainWindow;
 let activeJob = null;
@@ -14,6 +15,21 @@ let activeJob = null;
 const isPackaged = () => app.isPackaged;
 const sourceRoot = () => path.resolve(__dirname, "..");
 const resourceRoot = () => isPackaged() ? process.resourcesPath : sourceRoot();
+function upscaleRuntime() {
+  const installFile = path.join(resourceRoot(), "upscale-install.json");
+  if (isPackaged() && fs.existsSync(installFile)) {
+    return JSON.parse(fs.readFileSync(installFile, "utf8")).runtime;
+  }
+  return path.join(resourceRoot(), "runtime", "upscale");
+}
+const upscale = new UpscaleManager({
+  runtime: upscaleRuntime(),
+  workerPath: isPackaged() ? path.join(process.resourcesPath, "app.asar.unpacked", "electron", "upscale-worker.py") : undefined,
+  tools: path.join(resourceRoot(), "runtime", "tools"),
+  outputRoot: () => loadConfig().outputRoot,
+  editingBusy: () => !!activeJob,
+  send: event => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send("upscale:event", event); }
+});
 const premiereRuntime = () => path.join(app.getPath("appData"), "Adobe", "CEP", "extensions", "ir.hafez.studio.cep", "runtime");
 
 function userConfigPath() {
@@ -459,6 +475,7 @@ ipcMain.handle("system:doctor", () => {
   });
 });
 ipcMain.handle("job:start", (_, payload) => {
+  if (upscale.active || upscale.externalBusy()) throw new Error("Upscale در حال اجراست؛ برای جلوگیری از کمبود حافظه صبر کن.");
   if (activeJob) throw new Error("یک Job در حال اجراست.");
   const config = saveConfig(payload.config || {});
   const glassReview = config.stylePack === "glass";
@@ -505,6 +522,16 @@ ipcMain.handle("job:cancel", () => {
 });
 ipcMain.handle("path:open", (_, target) => shell.openPath(target));
 ipcMain.handle("path:show", (_, target) => shell.showItemInFolder(target));
+ipcMain.handle("upscale:status", () => upscale.status());
+ipcMain.handle("upscale:start", (_, payload) => upscale.start(payload));
+ipcMain.handle("upscale:cancel", () => upscale.cancel());
+app.on("before-quit", event => {
+  if (upscale.active) {
+    event.preventDefault();
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show();
+    dialog.showMessageBoxSync({ type: "info", message: "Upscale در حال اجراست. ابتدا از بخش Upscale توقف را بزن و منتظر پایان بمان." });
+  }
+});
 
 app.whenReady().then(() => {
   createWindow();

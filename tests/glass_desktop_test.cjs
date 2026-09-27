@@ -9,10 +9,13 @@ function fixture() {
   const pending = new Promise((a, r) => { accept = a; reject = r; });
   const broker = {preflight: r => {preflights.push(r); if (preflightFailure) throw Error("offline");}, finish: async (opts, progress) => {calls.push(opts);progress("native waiting");return pending;}};
   const app = {isPackaged:false, getPath: name => path.join(root, name), whenReady: () => ({then: cb => cb()}), on: () => {}, quit: () => {}};
+  class TestUpscaleManager extends require('../electron/upscale').UpscaleManager {
+    constructor(options) { super({...options, runtime:path.join(root,'upscale')}); }
+  }
   class Window { constructor() {this.webContents = {send: (channel,data) => events.push({channel,data})};} isDestroyed(){return false;} loadFile(){} once(){} }
   function spawn(exe,args,options) { const child = new EventEmitter(); child.stdout = new EventEmitter(); child.stderr = new EventEmitter(); child.pid = 42; child.kill = () => {child.killed=true;}; spawns.push({exe,args,options,child}); return child; }
   const ctx = vm.createContext({console, process:{env:{},platform:"win32"},__dirname:path.resolve("electron"),Date, setTimeout,
-    require: name => name==="electron" ? {app,BrowserWindow:Window,ipcMain:{handle:(n,f)=>handlers[n]=f},dialog:{},shell:{}} : name==="child_process" ? {spawn} : name==="./glass-finisher" ? broker : name==="./job-recovery" ? {findPreparedJob:(...args)=>{calls.push({recovery:args});return null;}} : require(name)});
+    require: name => name==="electron" ? {app,BrowserWindow:Window,ipcMain:{handle:(n,f)=>handlers[n]=f},dialog:{},shell:{}} : name==="child_process" ? {spawn} : name==="./upscale" ? {UpscaleManager:TestUpscaleManager} : name==="./glass-finisher" ? broker : name==="./job-recovery" ? {findPreparedJob:(...args)=>{calls.push({recovery:args});return null;}} : require(name)});
   vm.runInContext(fs.readFileSync("electron/main.js", "utf8"), ctx);
   const payload={cam1:path.join(root,"cam1.mp4"),cam2:path.join(root,"cam2.mp4"),config:{outputRoot:path.join(root,"out"),stylePack:"glass",performanceProfile:"balanced"}};
   return {handlers,events,spawns,calls,preflights,accept,reject,payload,ctx,root,offline:()=>preflightFailure=true};

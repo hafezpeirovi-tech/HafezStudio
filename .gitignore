@@ -27,6 +27,7 @@ venv/
 
 # Runtime / Models
 runtime/models/
+runtime/upscale/
 runtime/tools/
 *.bin
 *.onnx
