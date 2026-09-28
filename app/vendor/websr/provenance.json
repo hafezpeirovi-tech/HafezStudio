@@ -1,0 +1,10 @@
+{
+  "source": "https://github.com/sb2702/websr",
+  "license": "MIT",
+  "model": "anime4k/cnn-2x-l, Real Life weights",
+  "downloaded": "2026-09-27",
+  "originalSha256": "63752687ecf93abae15a7f8b481b23680d5adc1a98691e8227e0a14c8f113f6e",
+  "bundleSha256": "79e88cc04803df1264fe3b9d025357388fec0badedff3bd91970bb5edf49b7f5",
+  "weightsSha256": "4582f6d9efedce23d993be5ef99eb7e5f223a00a0c342a21994e50fa22c08c00",
+  "transform": "Unwrap literal webpack eval modules; no network calls added"
+}

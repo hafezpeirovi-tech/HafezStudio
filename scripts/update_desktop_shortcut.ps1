@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$appDirectory = Join-Path $projectRoot 'release-upscale-candidate-20260927-03\win-unpacked'
+$appDirectory = Join-Path $projectRoot 'release-upscale-candidate-20260928-01\win-unpacked'
 $appExe = Join-Path $appDirectory 'Hafez Studio.exe'
 if (-not (Test-Path -LiteralPath $appExe -PathType Leaf)) { throw 'Updated application is missing.' }
 $desktopDirectory = [Environment]::GetFolderPath('Desktop')

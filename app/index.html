@@ -278,10 +278,11 @@
         </section>
 
         <section class="studio-view tool-view glass" data-workspace="upscale" hidden>
-          <div class="tool-hero"><div><p class="kicker">LOCAL AI · QUALITY FIRST</p><h2>جزئیات بیشتر؛ با بازبینی خودت</h2><p>SeedVR2 3B FP16 · فایل اصلی حفظ می‌شود · بدون آپلود ویدیو</p></div><button id="upRefresh" class="ghost">بررسی نصب</button></div>
+          <div class="tool-hero"><div><p class="kicker">LOCAL AI · YOUR CHOICE</p><h2>جزئیات بیشتر؛ با موتور دلخواهت</h2><p>WebSR سریع یا SeedVR2 سنگین · فایل اصلی حفظ می‌شود · بدون آپلود ویدیو</p></div><button id="upRefresh" class="ghost">بررسی نصب</button></div>
           <p id="upInstalled" role="status">در حال بررسی محیط مستقل…</p>
           <div class="settings-grid">
-            <label><span><b>ویدیوی ورودی</b><small>Rec.709 SDR · 8/10-bit · نرخ فریم ثابت · خروجی ProRes HQ ده‌بیتی؛ HDR پشتیبانی نمی‌شود.</small></span><div class="path-control"><input id="upInput" readonly /><button id="upChoose" class="ghost">انتخاب</button></div></label>
+            <label><span><b>موتور افزایش کیفیت</b><small>WebSR رایگان؛ Topaz Proteus با نصب و لایسنس فعال. پردازش مستقل از تدوین.</small></span><select id="upEngine"><option value="websr" selected>WebSR · سریع و رایگان · Real Life</option><option value="seedvr2">SeedVR2 FP16 · سنگین و کند</option><option value="topaz">Topaz Proteus · محلی · Auto</option></select></label>
+            <label><span><b>ویدیوی ورودی</b><small>نرخ فریم ثابت، SDR؛ WebSR ورودی ۸ بیت و خروجی H.264 دارد. صدا حفظ می‌شود.</small></span><div class="path-control"><input id="upInput" readonly /><button id="upChoose" class="ghost">انتخاب</button></div></label>
             <label><span><b>ضلع کوتاه خروجی</b><small>نسبت تصویر حفظ می‌شود؛ 4K نیازمند آزمون حافظه است.</small></span><select id="upResolution"><option value="720">720</option><option value="1080" selected>1080</option><option value="1440">1440</option><option value="2160">2160 · 4K landscape</option></select></label>
             <label><span><b>شروع نمونه (ثانیه)</b><small>پیش‌نمایش پنج‌ثانیه‌ای برای بررسی صورت، نوشته و لرزش بافت</small></span><input id="upStart" type="number" min="0" step="0.1" value="0" /></label>
             <label><span><b>بازبینی نمونه (اختیاری)</b><small>برای پردازش کامل الزامی نیست. مدل ممکن است جزئیات را تغییر دهد؛ خروجی را بازبینی کن.</small></span><span><input id="upConfirm" type="checkbox" /> نمونهٔ همین تنظیمات را بررسی کردم.</span></label>

@@ -1,12 +1,12 @@
 "use strict";
 (() => {
   const el = id => document.getElementById(id);
-  let busy = false, externalRunning = false, installed = false, previewReady = false, output = "";
+  let busy = false, externalRunning = false, installed = false, previewReady = false, output = "", engines = {};
   function controls() {
     el("upPreview").disabled = busy || !installed || !el("upInput").value;
     el("upFull").disabled = busy || !installed || !el("upInput").value;
     el("upCancel").disabled = !busy || externalRunning;
-    ["upChoose", "upResolution", "upStart", "upConfirm"].forEach(id => el(id).disabled = busy);
+    ["upChoose", "upEngine", "upResolution", "upStart", "upConfirm"].forEach(id => el(id).disabled = busy);
     el("upOpen").disabled = !output;
   }
   function invalidate() {
@@ -17,10 +17,10 @@
   async function refresh() {
     try {
       const info = await window.hermes.upscaleStatus();
-      installed = info.installed; busy = info.running;
+      engines = info.engines || {}; installed = engines[el('upEngine').value]?.installed ?? info.installed; busy = info.running;
       externalRunning = info.externalRunning;
       if (externalRunning) el("upStatus").textContent = "آزمون Upscale از پردازش دیگری در حال اجراست. پس از پایان، بررسی نصب را بزن؛ این پنجره پردازش دیگری را متوقف نمی‌کند.";
-      el("upInstalled").textContent = installed ? "محیط نصب‌شده: SeedVR2 3B FP16 · کیفیت نهایی نیازمند بازبینی است" : "نصب کامل نیست: " + info.missing.join("، ");
+      el("upInstalled").textContent = (engines[el('upEngine').value]?.label || 'WebSR') + (installed ? ' · آماده؛ کیفیت خروجی را بازبینی کن.' : ' · نصب کامل نیست.');
     } catch (error) { el("upInstalled").textContent = error.message; }
     controls();
   }
@@ -32,7 +32,7 @@
     try {
       const result = await window.hermes.upscaleStart({ input: el("upInput").value,
         resolution: Number(el("upResolution").value), start: Number(el("upStart").value),
-        mode, qualityConfirmed: el("upConfirm").checked });
+        mode, engine: el('upEngine').value, qualityConfirmed: el("upConfirm").checked });
       output = result.jobDir;
     } catch (error) { busy = false; el("upStatus").textContent = error.message; el("upProgress").value = 0; }
     controls();
@@ -42,6 +42,7 @@
     if (file) { el("upInput").value = file; invalidate(); }
   };
   el("upResolution").onchange = invalidate;
+  el('upEngine').onchange = () => { invalidate(); refresh(); };
   el("upStart").onchange = invalidate;
   el("upConfirm").onchange = controls;
   el("upRefresh").onclick = refresh;

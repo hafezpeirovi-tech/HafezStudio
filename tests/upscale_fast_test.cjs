@@ -1,0 +1,15 @@
+const assert=require('assert/strict'),fs=require('fs'),os=require('os'),path=require('path');
+const {validateMedia,assetsReady,acquireLock}=require('../electron/upscale-fast');
+const {validate}=require('../electron/upscale');
+const v={codec_type:'video',pix_fmt:'yuv420p',width:1080,height:1920,avg_frame_rate:'30/1',r_frame_rate:'30/1',field_order:'progressive',sample_aspect_ratio:'1:1'};
+assert.equal(validateMedia({streams:[v]}).fps,30);
+for(const change of [{color_transfer:'smpte2084'},{pix_fmt:'yuv420p10le'},{r_frame_rate:'24/1'},{field_order:'tt'},{side_data_list:[{rotation:90}]},{sample_aspect_ratio:'2:1'},{width:8000}])assert.throws(()=>validateMedia({streams:[{...v,...change}]}));
+assert.equal(assetsReady(),true);
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'hafez-fast-')),release=acquireLock(dir,'first');
+assert.throws(()=>acquireLock(dir,'second'));release();
+assert.equal(fs.existsSync(path.join(dir,'active-job.json')),false);
+const input=path.join(dir,'fixture.mp4');fs.writeFileSync(input,'fixture');
+const p={input,resolution:1440,start:0,mode:'full'};
+assert.equal(validate(p).engine,'websr');assert.equal(validate({...p,engine:'topaz'}).engine,'topaz');assert.throws(()=>validate({...p,engine:'unknown'}));
+assert.equal(validate({...p,engine:'seedvr2'}).engine,'seedvr2');
+console.log('PASS: fast engine input guards, model checksums, cross-instance lock, explicit engine selection.');
