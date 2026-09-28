@@ -499,7 +499,7 @@ ipcMain.handle("job:start", (_, payload) => {
     ...(prepared ? ["--manifest", prepared.manifestPath] : ["--cam1", payload.cam1, "--cam2", payload.cam2, "--output", outputDir]),
     "--job-id", jobId,
     "--style", config.stylePack,
-    ...(glassReview ? ["--glass-review"] : []),
+    ...(glassReview ? ["--glass-review", "--editorial-glass"] : []),
     "--density", config.graphicDensity,
     "--language", config.languageMode,
     "--performance", config.performanceProfile,

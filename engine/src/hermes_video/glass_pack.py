@@ -125,7 +125,9 @@ def load_library(root: Path | None = None) -> dict:
 
 def palette_values(palette: Mapping[str, str]) -> dict:
     result = {}
-    for key in DEFAULT_PALETTE:
+    if not set(DEFAULT_PALETTE).issubset(palette):
+        raise ValueError('Missing shared palette tokens')
+    for key in palette:
         if key == "id":
             continue
         value = palette.get(key, "")
@@ -263,7 +265,14 @@ def validate_plan(plan: Mapping, library: Mapping, *, qa: bool = False, root: Pa
         if not cue.get("template_layers"):
             raise ValueError("Empty cue layers")
         for layer in cue["template_layers"]:
-            asset = assets[layer["asset_id"]]
+            compiled = 'compiled_binding' in layer
+            if compiled:
+                from editorial_contract import validate_compiled_layer
+                asset = validate_compiled_layer(layer, cue, plan, root)
+                if layer.get('asset_id') != asset['id']:
+                    raise ValueError('Compiled asset identity mismatch')
+            else:
+                asset = assets[layer["asset_id"]]
             if layer["template_sha256"] != asset["sha256"]:
                 raise ValueError("Stale asset binding")
             if layer.get("family_id") != asset["family"] or layer.get("coordinate_space") != [asset["width"], asset["height"]]:
@@ -278,7 +287,7 @@ def validate_plan(plan: Mapping, library: Mapping, *, qa: bool = False, root: Pa
             if root is not None:
                 actual = Path(layer["template_path"]).resolve(strict=True)
                 expected = (root / asset["path"]).resolve(strict=True)
-                if actual != expected or not actual.is_relative_to((root / "motion-pack").resolve()) or sha256(actual) != asset["sha256"]:
+                if actual != expected or (not compiled and not actual.is_relative_to((root / "motion-pack").resolve())) or sha256(actual) != asset["sha256"]:
                     raise ValueError("Native plan path/hash mismatch")
             families.add(asset["family"])
             if not qa and (asset.get("nativeQA", {}).get("status") != "approved" or asset["nativeQA"].get("sha256") != asset["sha256"]):

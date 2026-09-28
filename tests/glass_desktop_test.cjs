@@ -40,6 +40,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
   }
   let x=fixture();x.handlers["job:start"](null,x.payload);
   assert.equal(x.preflights.length,1);assert(x.spawns[0].args.includes("--glass-review"));
+  assert(x.spawns[0].args.includes("--editorial-glass"));
   assert.equal(x.calls[0].recovery[3],"glass");assert.equal(x.spawns[0].options.env.HERMES_PRESERVE_CAMERA1_AUDIO,"1");
   engineComplete(x);await tick();
   assert(!x.events.some(e=>e.data.state==="completed"));assert.throws(()=>x.handlers["job:start"](null,x.payload),/Job/);
@@ -53,5 +54,6 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
   x=fixture();x.offline();assert.throws(()=>x.handlers["job:start"](null,x.payload),/offline/);assert.equal(x.spawns.length,0);
   x=fixture();x.handlers["job:start"](null,x.payload);engineComplete(x,1);await tick();assert.equal(x.calls.filter(c=>c.summary).length,0);
   x=fixture();x.payload.config.stylePack="signal-os";x.handlers["job:start"](null,x.payload);engineComplete(x);await tick();assert.equal(x.preflights.length,0);assert(!x.spawns[0].args.includes("--glass-review"));assert.equal(x.events.findLast(e=>e.channel==="job:state").data.state,"completed");
+  assert(!x.spawns[0].args.includes("--editorial-glass"));
   console.log("PASS Glass desktop IPC: preflight before ASR; Glass flag; style-safe resume; await native receipt; truthful errors; no premature 100%; guarded cancel; legacy path retained.");
 })().catch(e=>{console.error(e);process.exitCode=1;});

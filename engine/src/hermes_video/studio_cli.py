@@ -177,11 +177,14 @@ def _configure_runtime(
     performance: str = "maximum",
     analysis_only: bool = False,
     glass_review: bool = False,
+    editorial_glass: bool = False,
 ) -> None:
     # A style label must never silently run the legacy graphic generator. Glass
     # currently has an isolated native QA path, not automatic chapter retiming.
     if glass_review and style.strip().lower() != 'glass':
         raise ValueError('--glass-review requires --style glass')
+    if editorial_glass and not glass_review:
+        raise ValueError('--editorial-glass requires --glass-review')
     if style.strip().lower() == "glass" and not (analysis_only or glass_review):
         raise ValueError(
             "Glass automatic editing is not released yet. Use glass-status and "
@@ -195,6 +198,7 @@ def _configure_runtime(
     os.environ["HERMES_MOGRT_ROOT"] = str(adobe_mogrt_root())
     os.environ["HERMES_STYLE_PACK"] = style
     os.environ['HERMES_GLASS_REVIEW_MODE'] = '1' if glass_review else '0'
+    os.environ['HAFEZ_EDITORIAL_GLASS'] = '1' if editorial_glass else '0'
     os.environ["HERMES_GRAPHIC_DENSITY"] = density
     os.environ["HERMES_LANGUAGE_MODE"] = language
     if title_font:
@@ -242,6 +246,7 @@ def _configure_job_runtime(output: Path, args: argparse.Namespace) -> None:
         performance=args.performance,
         analysis_only=getattr(args, 'command', '') == 'prepare',
         glass_review=getattr(args,'glass_review',False),
+        editorial_glass=getattr(args,'editorial_glass',False),
     )
 
 
@@ -282,6 +287,11 @@ def finalize_job(args: argparse.Namespace) -> int:
     if args.style.strip().lower() == 'glass' and payload.get('glass_review'):
         if review is not None:
             raise ValueError('Existing Glass review is immutable; use a new job for changed review decisions')
+        if getattr(args,'editorial_glass',False):
+            current_plan=json.loads(Path(payload['outputs']['professional_plan']).read_text(encoding='utf-8-sig'))
+            if not current_plan.get('editorial_compilation'):
+                from editorial_pipeline import upgrade_manifest
+                manifest=upgrade_manifest(manifest)
         summary = validate_job_outputs(manifest)
         print('HERMES_STAGE finish 100 بستهٔ Glass قبلی اعتبارسنجی شد؛ بازبینی Premiere لازم است', flush=True)
         _json_print({'event':'completed','jobId':args.job_id,'manifest':str(manifest),
@@ -524,6 +534,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="hermes-engine")
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("glass-status", help="Read local Glass inventory and honest readiness status")
+    editorial = subparsers.add_parser('glass-editorial', help='Compile existing reviewed cues into current-source editable MOGRTs; no final export')
+    editorial.add_argument('--manifest',required=True)
     glass_validate = subparsers.add_parser("glass-validate", help="Validate a typed Glass plan without touching Premiere")
     glass_validate.add_argument("--plan", required=True)
     glass_validate.add_argument("--qa", action="store_true", help="Permit isolated native QA, never production approval")
@@ -548,6 +560,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--language", choices=("fa", "fa-en", "auto"), default="fa-en")
     _add_typography_arguments(run_parser)
     run_parser.add_argument('--glass-review',action='store_true',help='Opt in to an isolated Glass draft; not production approval')
+    run_parser.add_argument('--editorial-glass',action='store_true',help='Compile current-media Editorial title cues with local After Effects')
     prepare_parser = subparsers.add_parser("prepare")
     prepare_parser.add_argument("--cam1", required=True)
     prepare_parser.add_argument("--cam2", required=True)
@@ -565,6 +578,7 @@ def build_parser() -> argparse.ArgumentParser:
     finalize_parser.add_argument("--language", choices=("fa", "fa-en", "auto"), default="fa-en")
     _add_typography_arguments(finalize_parser)
     finalize_parser.add_argument('--glass-review',action='store_true',help='Opt in to an isolated Glass draft; not production approval')
+    finalize_parser.add_argument('--editorial-glass',action='store_true',help='Compile current-media Editorial title cues with local After Effects')
     return parser
 
 
@@ -574,6 +588,12 @@ def main() -> int:
         if args.command == "glass-status":
             from glass_pack import capability_report
             _json_print(capability_report())
+            return 0
+        if args.command == 'glass-editorial':
+            from editorial_pipeline import upgrade_manifest
+            manifest=upgrade_manifest(Path(args.manifest))
+            summary=validate_job_outputs(manifest)
+            _json_print(dict(event='completed',manifest=str(manifest),summary=summary,publicationReady=False))
             return 0
         if args.command == "glass-assemble":
             from glass_assembly import assemble_review

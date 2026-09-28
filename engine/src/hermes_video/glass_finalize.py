@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 from fractions import Fraction
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -87,6 +88,9 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
                  srt=str(output/'Glass-Director.srt'),
                  tight_srt=str(output/'Glass-Director.srt'),safe_srt=str(output/'Glass-Director.srt'),
                  youtube=str(youtube),audit=str(output/'assembly-report.json'))
+    if os.environ.get('HAFEZ_EDITORIAL_GLASS') == '1':
+        from editorial_pipeline import compile_review
+        outputs=compile_review(outputs,root=root)
     review_manifest=copy.deepcopy(manifest)
     review_manifest.update(style_pack='glass',publication_ready=False,glass_review=True)
     # Do not advertise stale legacy graphics, captions or edit-note paths.
@@ -150,8 +154,13 @@ def validate_review_outputs(manifest, *, root=None):
     graphics=[(round(Fraction(str(c['start']))*rate),round(Fraction(str(c['end']))*rate))
               for c in plan['graphics']]
     chapter_graphics=[g for g,c in zip(graphics,plan['graphics']) if c.get('layout_mode')!='fullscreen-voice-continuous']
-    if chapter_graphics!=ranges or any(sorted(layer['track'] for layer in c['template_layers'])!=[2,3]
-                              for c in plan['graphics']):
+    def layout_tracks_valid(card):
+        layers=card['template_layers']
+        if any('compiled_binding' in layer for layer in layers):
+            return (card.get('layout_mode')=='fullscreen-voice-continuous' and
+                    len(layers)==1 and layers[0]['track']==3)
+        return sorted(layer['track'] for layer in layers)==[2,3]
+    if chapter_graphics!=ranges or not all(layout_tracks_valid(c) for c in plan['graphics']):
         raise ValueError('Glass cards do not occupy exact standalone slots')
     for i,(a,b) in enumerate(graphics):
         if not 0<=a<b<=mapping.output_duration or (i and a<graphics[i-1][1]):
@@ -193,4 +202,5 @@ def validate_review_outputs(manifest, *, root=None):
                 cameraShots=len(plan['camera_schedule']),punchIns=len(plan['punch_ins']),
                 xml=str(xml_path),plan=str(plan_path),srt=str(srt_path),youtube=outputs.get('youtube'),
                 expectedProject=plan['expected_project_path'],
+                editorialCompiled=len(plan.get('editorial_compilation',{}).get('compiled_cue_ids',[])),
                 finisher='Create the exact separate review project, import XML, bind its sequence ID and apply the typed Glass plan. Never export automatically.')

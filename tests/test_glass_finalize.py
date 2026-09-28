@@ -118,6 +118,22 @@ class GlassFinalizeTests(unittest.TestCase):
         self.assertEqual(result,[{'segment_id':2,'quote_fa':'متن منبع','title_en':''},
                                  {'segment_id':3,'quote_fa':'','title_en':''}])
 
+    def test_sfx_accepts_premiere_local_url_but_not_other_media(self):
+        from urllib.parse import quote, urlparse
+        with tempfile.TemporaryDirectory() as tmp:
+            _, _, plan, sequence, _ = self.review_fixture(Path(tmp))
+            node = sequence.findall('media/audio/track')[3].find('clipitem/file/pathurl')
+            original = node.text
+            node.text = 'file://localhost' + quote(urlparse(original).path, safe='/')
+            glass_audio.validate_entries(sequence, plan)
+            other = Path(tmp)/'other.wav'
+            other.write_bytes(b'fixture')
+            for url in (other.as_uri(), 'https://example.com/entry.wav',
+                        'file://remote/entry.wav', original+'?x=1'):
+                node.text = url
+                with self.assertRaises(ValueError):
+                    glass_audio.validate_entries(sequence, plan)
+
     def test_no_legacy_graphic_call_after_glass_return(self):
         # Validate the real branch wiring without importing GPU/ASR dependencies.
         import ast

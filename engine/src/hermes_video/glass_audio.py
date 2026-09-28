@@ -6,6 +6,7 @@ import math
 import subprocess
 from fractions import Fraction
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 from xml.etree import ElementTree as ET
 
 from chapter_timeline import frame, xml_clock
@@ -131,7 +132,21 @@ def validate_entries(sequence, plan):
     if len(clips)!=len(cues) or (clips and tracks[3].findtext('enabled')!='TRUE'):
         raise ValueError('SFX XML count/track state mismatch')
     def signature(node):
-        return (node.tag,tuple(sorted(node.attrib.items())),(node.text or '').strip(),
+        text = (node.text or '').strip()
+        if node.tag == 'pathurl':
+            # Premiere uses localhost/C%3A while pathlib emits ///C:.
+            # Compare the exact resolved local file, not URL serialization.
+            url = urlparse(text)
+            if url.scheme != 'file' or url.netloc not in ('', 'localhost') or url.query or url.fragment:
+                raise ValueError('SFX XML requires a local media URL')
+            value = unquote(url.path)
+            if len(value) > 2 and value[0] == '/' and value[2] == ':':
+                value = value[1:]
+            path = Path(value)
+            if not path.is_absolute():
+                raise ValueError('SFX XML requires an absolute media path')
+            text = str(path.resolve(strict=True))
+        return (node.tag,tuple(sorted(node.attrib.items())),text,
                 tuple(signature(c) for c in node))
     for i,(clip,cue) in enumerate(zip(clips,cues)):
         if signature(clip)!=signature(audio_clip(cue,xml_clock(sequence),i)):

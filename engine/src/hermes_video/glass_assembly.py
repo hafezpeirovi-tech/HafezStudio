@@ -224,7 +224,7 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
     captions=read_srt(paths[3]);requests=json.loads(paths[4].read_text(encoding='utf-8-sig'))
     editorial=editorial_proposals(manifest['review_segments'],requests)
     chosen,rejected=select_chapters(original,manifest['review_segments'],context,captions,editorial['chapters'])
-    intro=dict(id='glass-intro',at=0,quote_fa='شروع ویدیو',title_en='HAFEZ STUDIO',
+    intro=dict(id='glass-intro',at=0,quote_fa='شروع ویدیو',title_en='HAFEZ-FX',
                boundary_status='before-all-source-media',copy_role='navigation-label-not-speech')
     chosen=[intro,*chosen]
     mapping=InsertionMap(int(original.findtext('duration')), [Insertion(c['id'],c['at'],round(6*rate)) for c in chosen],rate)
