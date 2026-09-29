@@ -1,5 +1,7 @@
 # Editorial Glass — automatic compilation checkpoint
 
+Update 2026-09-29: the installed release is now activated; see `EDITORIAL_RELEASE_2026-09-29.md` for verification, limitations and rollback. The historical pending-install state below is superseded.
+
 Status: **full existing review assembled automatically and saved in native Premiere; installed desktop release pending visual QA**. This supersedes the single-cue limitation in `EDITORIAL_SOURCE_BINDING_2026-09-28.md`, not its historical results.
 
 ## Implemented
