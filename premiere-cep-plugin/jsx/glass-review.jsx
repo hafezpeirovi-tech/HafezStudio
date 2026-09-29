@@ -5,9 +5,10 @@ $._hafez.finishGlassReview = function (requestJson) {
     var report = {ok:false, mode:"finish_glass", saved:false, caption_created:false,
         publication_ready:false, messages:[], project:"", sequence:"", sequence_id:"", mogrt_count:0};
     function key(p) { return String(new File(p).fsName).replace(/\\/g,"/").toLowerCase(); }
+    var reviewProject=null;
     function requireTarget(request, id) {
-        if (!app.project || key(app.project.path) !== key(request.expected_project_path)) throw Error("Active review project changed");
-        if (id && (!app.project.activeSequence || String(app.project.activeSequence.sequenceID)!==id)) throw Error("Active review sequence changed");
+        $._hafez.requireProject(request.expected_project_path,reviewProject);
+        if (id && (!reviewProject.activeSequence || String(reviewProject.activeSequence.sequenceID)!==id)) throw Error("Active review sequence changed");
     }
     function sourceSnapshot(seq) {
         var rows=[];
@@ -48,18 +49,20 @@ $._hafez.finishGlassReview = function (requestJson) {
         if (planned!==request.expected_mogrt_count || plan.sfx_cues.length!==request.expected_sfx_count) throw Error("Native inventory differs from engine result");
         // Never closeDocument(), saveAs() or overwrite an existing project.
         if (app.newProject(projectFile.fsName)!==true) throw Error("Premiere did not create the new review project");
+        reviewProject=$._hafez.findOpenProject(request.expected_project_path);
         requireTarget(request);
-        report.project=app.project.path;
-        if (app.project.sequences.numSequences!==0) throw Error("New review project is not empty");
+        report.project=reviewProject.path;
+        report.project_document_id=String(reviewProject.documentID);
+        if (reviewProject.sequences.numSequences!==0) throw Error("New review project is not empty");
         var imported=$._hafez.parseJson($._hafez.importXmlRequest($._hafez.stringify({
             protocol:"hafez-native-import-v1",mode:"import_xml",request_id:request.request_id,
             expected_project_path:request.expected_project_path,xml_path:request.xml_path,
             bin_name:"Glass - Current Review",expected_sequence_name:request.expected_sequence_name,
-            expected_sequence_names:[request.expected_sequence_name]})));
+            expected_sequence_names:[request.expected_sequence_name]}),reviewProject));
         if (!imported.ok) throw Error(imported.messages.join(" | "));
         report.sequence_id=imported.sequence_id;report.sequence=imported.sequence;
         requireTarget(request,report.sequence_id);
-        var seq=app.project.activeSequence;
+        var seq=reviewProject.activeSequence;
         if (seq.videoTracks.numTracks!==4 || seq.audioTracks.numTracks!==5) throw Error("Unexpected native track inventory");
         if (seq.audioTracks[0].isMuted() || !seq.audioTracks[1].isMuted()) throw Error("Original dialogue/muted camera-2 state differs");
         if (seq.audioTracks[2].clips.numItems || seq.audioTracks[4].clips.numItems || seq.audioTracks[3].clips.numItems!==request.expected_sfx_count || seq.audioTracks[3].isMuted()) throw Error("Native SFX/music routing differs");
@@ -75,15 +78,15 @@ $._hafez.finishGlassReview = function (requestJson) {
         plan.expected_sequence_id=report.sequence_id;
         var boundPath=planFile.parent.fsName+"/Glass-Native-Bound.plan.json";
         writeNew(boundPath,plan);
-        var applied=$._hafez.parseJson($._hafez.applyPlan(boundPath,false));
+        var applied=$._hafez.parseJson($._hafez.applyPlan(boundPath,false,reviewProject));
         report.apply=applied;
         if (!applied.ok || applied.failed || applied.disabled || applied.safetyFailures || applied.inserted!==planned) throw Error("Native MOGRT application failed; partial review preserved");
         requireTarget(request,report.sequence_id);
         if (sourceSnapshot(seq)!==before) throw Error("Camera/dialogue changed during MOGRT application");
         report.mogrt_count=applied.inserted;
-        var bin=app.project.rootItem.createBin("Glass Captions");
+        var bin=reviewProject.rootItem.createBin("Glass Captions");
         if (!bin) throw Error("Caption bin creation failed");
-        if (!app.project.importFiles([captionsFile.fsName],true,bin,false)) throw Error("SRT import failed");
+        if (!reviewProject.importFiles([captionsFile.fsName],true,bin,false)) throw Error("SRT import failed");
         if (bin.children.numItems!==1 || key(bin.children[0].getMediaPath())!==key(captionsFile.fsName)) throw Error("Imported caption identity mismatch");
         requireTarget(request,report.sequence_id);
         if (seq.createCaptionTrack(bin.children[0],0)!==true) throw Error("Native caption track creation unconfirmed");
@@ -93,8 +96,8 @@ $._hafez.finishGlassReview = function (requestJson) {
         report.compositing_review_required=true;
         report.fonts_provisional=true;
         requireTarget(request,report.sequence_id);
-        app.project.save();
-        if (!(new File(app.project.path)).exists) throw Error("Saved review project missing");
+        reviewProject.save();
+        if (!(new File(reviewProject.path)).exists) throw Error("Saved review project missing");
         report.saved=true;report.ok=true;
         report.messages.push("New native review saved with editable MOGRT, source SFX and captions. Font/compositing/editorial review remains. No movie exported.");
     } catch (error) {

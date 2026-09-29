@@ -405,7 +405,43 @@ $._hafez.inspectTimeline = function (requestJson) {
     return $._hafez.stringify(report);
 };
 
-$._hafez.importXmlRequest = function (requestJson) {
+// app.project follows panel focus; it is not a stable owner in multi-project sessions.
+// Resolve the explicit path, then retain and revalidate the native document identity.
+$._hafez.requireProject = function (path, boundProject) {
+    function key(p) { return String(new File(p).fsName).replace(/\\/g,"/").toLowerCase(); }
+    if (!path) throw Error("Exact project path required");
+    if (!boundProject) {
+        var active=app.project;
+        if (!active || !active.path || key(active.path)!==key(path)) throw Error("Active project does not match the explicitly requested QA project");
+        return active;
+    }
+    if (!boundProject.documentID || key(boundProject.path)!==key(path)) throw Error("Bound project identity mismatch");
+    var matches=0;
+    for (var i=0;i<app.projects.numProjects;i++) {
+        var candidate=app.projects[i];
+        if (key(candidate.path)===key(path)) {
+            matches++;
+            if (String(candidate.documentID)!==String(boundProject.documentID)) throw Error("Bound project document changed");
+        }
+    }
+    if (matches!==1) throw Error("Bound project missing or ambiguous");
+    return boundProject;
+};
+
+$._hafez.findOpenProject = function (path) {
+    var expected=String(new File(path).fsName).replace(/\\/g,"/").toLowerCase(), found=null;
+    for (var i=0;i<app.projects.numProjects;i++) {
+        var candidate=app.projects[i];
+        if (String(new File(candidate.path).fsName).replace(/\\/g,"/").toLowerCase()===expected) {
+            if (found) throw Error("Ambiguous open project path");
+            found=candidate;
+        }
+    }
+    if (!found) throw Error("Requested project is not open");
+    return $._hafez.requireProject(path,found);
+};
+
+$._hafez.importXmlRequest = function (requestJson, boundProject) {
     var report = {ok:false, mode:"import_xml", imported:false, activated:false, saved:false, bin:"", sequences:[], messages:[]};
     function pathKey(path) { return String(new File(path).fsName).replace(/\\/g, "/").toLowerCase(); }
     function findBin(parent, name, depth) {
@@ -425,8 +461,7 @@ $._hafez.importXmlRequest = function (requestJson) {
         if (request.protocol !== "hafez-native-import-v1" || request.mode !== "import_xml") throw new Error("Unsupported native import request");
         if (!request.expected_project_path || !request.xml_path || !request.bin_name || !request.expected_sequence_name) throw new Error("Exact project, XML, bin and sequence are required");
         if (!/\.prproj$/i.test(request.expected_project_path) || !/\.xml$/i.test(request.xml_path)) throw new Error("Expected a Premiere project and XML file");
-        var project = app.project;
-        if (!project || !project.path || pathKey(project.path) !== pathKey(request.expected_project_path)) throw new Error("Active project does not match the explicitly requested QA project");
+        var project = $._hafez.requireProject(request.expected_project_path,boundProject);
         if (!(new File(request.xml_path)).exists) throw new Error("XML file not found");
         var names = request.expected_sequence_names;
         if (!(names instanceof Array) || names.length < 1 || names.length > 20) throw new Error("Expected sequence inventory is required");
@@ -456,7 +491,7 @@ $._hafez.importXmlRequest = function (requestJson) {
         var imported = project.importFiles([new File(request.xml_path).fsName], true, bin, false);
         report.imported = imported === true || imported === 1;
         if (!report.imported) throw new Error("Premiere did not confirm XML import; inspect the isolated bin before retrying");
-        if (!app.project || pathKey(app.project.path) !== pathKey(request.expected_project_path)) throw new Error("Active project changed during XML import");
+        $._hafez.requireProject(request.expected_project_path,boundProject);
         var newNames = {}, selected = null;
         for (var afterIndex = 0; afterIndex < project.sequences.numSequences; afterIndex++) {
             var candidate = project.sequences[afterIndex];
@@ -506,7 +541,7 @@ $._hafez.verifyExistingEdit = function(sequence, tracks, exactCount) {
     return true;
 };
 
-$._hafez.applyPlan = function (path, muteGuide) {
+$._hafez.applyPlan = function (path, muteGuide, boundProject) {
     // inserted remains the compatible count of fully verified active items,
     // not the number of import attempts or disabled partial results.
     var result = {ok:false, inserted:0, attempted:0, imported:0, updated:0, disabled:0, safetyFailures:0, textUpdated:0, failed:0, warnings:[], messages:[]};
@@ -514,8 +549,9 @@ $._hafez.applyPlan = function (path, muteGuide) {
         var plan = $._hafez.readJson(path);
         if (plan.protocol !== "hermes-professional-edit-v2") throw new Error("Plan باید V2 باشد.");
         if (plan.style_pack === "glass" && (plan.purpose !== "isolated-native-qa" || !plan.expected_project_path)) throw new Error("Glass production routing awaits font and native QA approval; exact isolated QA project required");
-        if (plan.expected_project_path && String(app.project.path).replace(/\\/g,"/").toLowerCase() !== String(plan.expected_project_path).replace(/\\/g,"/").toLowerCase()) throw new Error("Active project does not match the requested plan");
-        var sequence = app.project.activeSequence;
+        var project = plan.expected_project_path ? $._hafez.requireProject(plan.expected_project_path,boundProject) : app.project;
+        if (boundProject && !plan.expected_project_path) throw Error("Bound plan requires exact project path");
+        var sequence = project.activeSequence;
         if (!sequence) throw new Error("سکانس فعال پیدا نشد.");
         if (sequence.name !== plan.sequence) throw new Error("سکانس «" + plan.sequence + "» را فعال کن؛ سکانس فعلی با Plan یکسان نیست.");
         if (plan.expected_sequence_id && String(sequence.sequenceID) !== String(plan.expected_sequence_id)) throw new Error("Active sequence ID mismatch");
@@ -547,6 +583,7 @@ $._hafez.applyPlan = function (path, muteGuide) {
             expectedMogrtCount += countLayers && countLayers.length ? countLayers.length : 1;
         }
         for (var i = 0; i < graphics.length; i++) {
+            if (boundProject) $._hafez.requireProject(plan.expected_project_path,boundProject);
             var cue = graphics[i];
             if (cue.review_blocked === true) {
                 $._hafez.disableCue(sequence, cue, plannedMogrtIndex, result);
