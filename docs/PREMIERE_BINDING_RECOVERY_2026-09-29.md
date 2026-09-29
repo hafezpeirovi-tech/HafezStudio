@@ -44,6 +44,9 @@ Native receipt request `7ee7c6cf-35ec-48c6-91b3-5e324ab3a21f` confirms:
 - Captions created, source camera/dialogue tracks unchanged, 7 SFX synced.
 - Separate review saved; `publication_ready=false`.
 - Independent exact-project inspection confirmed all 8 MOGRTs.
+- Native Program Monitor frames at 01:25:00 and 06:53:00 visibly show the
+  new video's portrait card, title and captions. All layers are enabled and
+  their timing matches the plan; editable font/size flags read back true.
 
 Tests passed: `glass_project_binding_test.cjs`, `glass_finisher_test.cjs`,
 `glass_bridge_test.cjs`, `glass_panel_test.cjs`, `glass_desktop_test.cjs`.
@@ -57,3 +60,9 @@ The old vendor intro reports a missing Poppins-SemiBold dependency even though
 exposed text controls read back as ABAR. No font was installed in this repair.
 Automatic wording and visual composition still require the owner's review.
 This repair does not introduce additional template families or reselect titles.
+Exact text comparison found one host-normalized difference: the title
+`هزینه‌ی معامله` reads back as `هزینهی معامله` (ZWNJ removed). This is retained
+as a review issue, not silently classified as exact text equality.
+
+Source commit is local. Remote fetch failed with Windows schannel
+`SEC_E_NO_CREDENTIALS`; no credential changes or remote push were performed.
