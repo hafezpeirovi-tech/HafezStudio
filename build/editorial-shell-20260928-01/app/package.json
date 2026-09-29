@@ -1,0 +1,14 @@
+{
+  "name": "hafez-studio",
+  "productName": "Hafez Studio",
+  "version": "0.3.0",
+  "private": true,
+  "description": "AI-assisted professional video editing for Adobe Premiere Pro and After Effects",
+  "main": "electron/main.js",
+  "author": "Hafez Studio",
+  "license": "UNLICENSED",
+  "allowScripts": {
+    "electron@39.8.10": true,
+    "electron-winstaller@5.4.0": true
+  }
+}

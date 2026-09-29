@@ -1,0 +1,61 @@
+LAYER Topic Label
+FONT AbarHighFaNum-Regular
+BOUNDS 1.65499085187912 -18.4800009727478 164.040010273457 29.0400016307831
+fontObject substitute=false ps=AbarHighFaNum-Regular
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Secondary Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+LAYER Subtitle
+FONT AbarHighFaNum-Regular
+BOUNDS 2.25748658180237 -24.6400012969971 365.440006971359 33.600001335144
+fontObject substitute=false ps=AbarHighFaNum-Regular
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Secondary Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+LAYER Title Line 2
+FONT AbarHighFaNum-ExtraBold
+BOUNDS 5.60902378708124 -91.3920028209686 485.111964069307 120.15600335598
+fontObject substitute=false ps=AbarHighFaNum-ExtraBold
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+LAYER Title Line 1
+FONT AbarHighFaNum-ExtraBold
+BOUNDS 5.62202427536249 -91.3920028209686 516.017962239683 119.034005641937
+fontObject substitute=false ps=AbarHighFaNum-ExtraBold
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+LAYER English Eyebrow
+FONT ArialMT
+BOUNDS -314.633270263672 -16.755859375 312.746551513672 18.0361328125
+fontObject substitute=false ps=ArialMT
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Secondary Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+LAYER Brand
+FONT ArialMT
+BOUNDS -111.571876525879 -14.31640625 111.444923400879 14.31640625
+fontObject substitute=false ps=ArialMT
+sourceExpr= error=
+Fill/Color expr=thisComp.layer("HAFEZ CONTROLS").effect("Secondary Text Color")(1) err=
+Fill/Invert expr= err=
+Fill/Horizontal Feather expr= err=
+Fill/Vertical Feather expr= err=
+Fill/Opacity expr= err=
+DONE

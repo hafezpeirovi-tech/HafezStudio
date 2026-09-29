@@ -1,0 +1,21 @@
+{
+  "request_id": "HS-EDITORIAL-INTRO-V4-QA-20260928-01",
+  "completed_at": "2026-09-28T10:57:23.873Z",
+  "result": {
+    "ok": true,
+    "inserted": 2,
+    "attempted": 2,
+    "imported": 2,
+    "updated": 0,
+    "disabled": 0,
+    "safetyFailures": 0,
+    "textUpdated": 2,
+    "failed": 0,
+    "warnings": [],
+    "messages": [
+      "Typed controls verified: Hafez Glass editorial-intro-v4-original L0 | 5",
+      "Typed controls verified: Hafez Glass editorial-intro-v4-edit-test L0 | 8",
+      "پروژه عمداً Save نشد؛ پس از بازبینی خودت ذخیره کن."
+    ]
+  }
+}

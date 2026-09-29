@@ -1,0 +1,7 @@
+{
+ "mode":"inspect",
+ "request_id":"HS-EDITORIAL-INTRO-V4-INSPECT-20260928-01",
+ "plan_path":"C:/Users/1SKY.IR/.n8n/products/HafezStudio/motion-pack/modules/01-editorial-intro/Intro-Test.plan.json",
+ "expected_project_path":"C:/Users/1SKY.IR/.n8n/products/HafezStudio/motion-pack/modules/01-editorial-intro/Hafez-FX-Intro-Editable-Test.prproj",
+ "expected_sequence_name":"Hafez-FX Intro - Native QA"
+}

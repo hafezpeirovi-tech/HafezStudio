@@ -1,0 +1,837 @@
+{
+  "request_id": "HS-EDITORIAL-INTRO-V4-INSPECT-20260928-01",
+  "completed_at": "2026-09-28T10:59:44.875Z",
+  "result": {
+    "ok": true,
+    "sequence": "Hafez-FX Intro - Native QA",
+    "videoTracks": [
+      {
+        "index": 0,
+        "clips": 2,
+        "muted": false
+      },
+      {
+        "index": 1,
+        "clips": 2,
+        "muted": false
+      },
+      {
+        "index": 2,
+        "clips": 2,
+        "muted": false
+      }
+    ],
+    "firstMogrt": {
+      "track": 2,
+      "name": "Hafez Glass editorial-intro-v4-original L0",
+      "start": 0,
+      "end": 6,
+      "inPoint": 3600,
+      "outPoint": 3606,
+      "disabled": false,
+      "params": [
+        {
+          "name": "Topic Label",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[24],\"fontTextRunLength\":[14],\"textEditValue\":\"موضوع این قسمت\"}"
+        },
+        {
+          "name": "Subtitle",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[32],\"fontTextRunLength\":[26],\"textEditValue\":\"داده، احتمال و نقش احساسات\"}"
+        },
+        {
+          "name": "Title Line 2",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-ExtraBold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[102],\"fontTextRunLength\":[10],\"textEditValue\":\"کافی نیست.\"}"
+        },
+        {
+          "name": "Title Line 1",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-ExtraBold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[102],\"fontTextRunLength\":[12],\"textEditValue\":\"فقط استراتژی\"}"
+        },
+        {
+          "name": "English Eyebrow",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[23],\"fontTextRunLength\":[19],\"textEditValue\":\"THE BETTER QUESTION\"}"
+        },
+        {
+          "name": "Brand",
+          "type": "string",
+          "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[20],\"fontTextRunLength\":[8],\"textEditValue\":\"HAFEZ-FX\"}"
+        },
+        {
+          "name": "Portrait Video / Replace Media",
+          "type": "string",
+          "preview": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "name": "Background Color 5",
+          "type": "number",
+          "preview": "72075186727295232",
+          "color": [
+            1,
+            16,
+            30,
+            25
+          ]
+        },
+        {
+          "name": "Background Color 4",
+          "type": "number",
+          "preview": "72070788563341824",
+          "color": [
+            1,
+            12,
+            23,
+            18
+          ]
+        },
+        {
+          "name": "Background Color 3",
+          "type": "number",
+          "preview": "72085082600386048",
+          "color": [
+            1,
+            25,
+            46,
+            46
+          ]
+        },
+        {
+          "name": "Background Color 2",
+          "type": "number",
+          "preview": "72113670624134144",
+          "color": [
+            1,
+            51,
+            89,
+            68
+          ]
+        },
+        {
+          "name": "Background Color 1",
+          "type": "number",
+          "preview": "72068589439422464",
+          "color": [
+            1,
+            10,
+            17,
+            16
+          ]
+        },
+        {
+          "name": "Portrait Zoom",
+          "type": "number",
+          "preview": "100"
+        },
+        {
+          "name": "Title Scale",
+          "type": "number",
+          "preview": "100"
+        },
+        {
+          "name": "Title Line Spacing",
+          "type": "number",
+          "preview": "132"
+        },
+        {
+          "name": "Panel Opacity",
+          "type": "number",
+          "preview": "72"
+        },
+        {
+          "name": "Panel Tint",
+          "type": "number",
+          "preview": "72079584874470144"
+        },
+        {
+          "name": "Secondary Text Color",
+          "type": "number",
+          "preview": "72259907549708032",
+          "color": [
+            1,
+            184,
+            201,
+            191
+          ]
+        },
+        {
+          "name": "Accent Color",
+          "type": "number",
+          "preview": "18374827221069115000",
+          "color": [
+            255,
+            128,
+            233,
+            176
+          ]
+        },
+        {
+          "name": "Text Color",
+          "type": "number",
+          "preview": "72324779507512320",
+          "color": [
+            1,
+            243,
+            247,
+            244
+          ]
+        }
+      ],
+      "motion": [
+        {
+          "index": 0,
+          "name": "Position",
+          "value": [
+            0.5,
+            0.5
+          ]
+        },
+        {
+          "index": 1,
+          "name": "Scale",
+          "value": 100
+        },
+        {
+          "index": 2,
+          "name": "Scale Width",
+          "value": 100
+        },
+        {
+          "index": 3,
+          "name": "Uniform Scale",
+          "value": true
+        },
+        {
+          "index": 4,
+          "name": "Rotation",
+          "value": 0
+        },
+        {
+          "index": 5,
+          "name": "Anchor Point",
+          "value": [
+            0.5,
+            0.5
+          ]
+        },
+        {
+          "index": 6,
+          "name": "Anti-flicker Filter",
+          "value": 0
+        },
+        {
+          "index": 7,
+          "name": "Crop Left",
+          "value": 0
+        },
+        {
+          "index": 8,
+          "name": "Crop Top",
+          "value": 0
+        },
+        {
+          "index": 9,
+          "name": "Crop Right",
+          "value": 0
+        },
+        {
+          "index": 10,
+          "name": "Crop Bottom",
+          "value": 0
+        }
+      ],
+      "components": [
+        {
+          "name": "Opacity",
+          "matchName": "AE.ADBE Opacity"
+        },
+        {
+          "name": "Motion",
+          "matchName": "AE.ADBE Motion"
+        },
+        {
+          "name": "Graphic Parameters",
+          "matchName": "AE.ADBE Capsule"
+        }
+      ],
+      "component": true,
+      "propertyCount": 20
+    },
+    "mogrts": [
+      {
+        "track": 2,
+        "name": "Hafez Glass editorial-intro-v4-original L0",
+        "start": 0,
+        "end": 6,
+        "inPoint": 3600,
+        "outPoint": 3606,
+        "disabled": false,
+        "params": [
+          {
+            "name": "Topic Label",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[24],\"fontTextRunLength\":[14],\"textEditValue\":\"موضوع این قسمت\"}"
+          },
+          {
+            "name": "Subtitle",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[32],\"fontTextRunLength\":[26],\"textEditValue\":\"داده، احتمال و نقش احساسات\"}"
+          },
+          {
+            "name": "Title Line 2",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-ExtraBold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[102],\"fontTextRunLength\":[10],\"textEditValue\":\"کافی نیست.\"}"
+          },
+          {
+            "name": "Title Line 1",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-ExtraBold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[102],\"fontTextRunLength\":[12],\"textEditValue\":\"فقط استراتژی\"}"
+          },
+          {
+            "name": "English Eyebrow",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[23],\"fontTextRunLength\":[19],\"textEditValue\":\"THE BETTER QUESTION\"}"
+          },
+          {
+            "name": "Brand",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[20],\"fontTextRunLength\":[8],\"textEditValue\":\"HAFEZ-FX\"}"
+          },
+          {
+            "name": "Portrait Video / Replace Media",
+            "type": "string",
+            "preview": "00000000-0000-0000-0000-000000000000"
+          },
+          {
+            "name": "Background Color 5",
+            "type": "number",
+            "preview": "72075186727295232",
+            "color": [
+              1,
+              16,
+              30,
+              25
+            ]
+          },
+          {
+            "name": "Background Color 4",
+            "type": "number",
+            "preview": "72070788563341824",
+            "color": [
+              1,
+              12,
+              23,
+              18
+            ]
+          },
+          {
+            "name": "Background Color 3",
+            "type": "number",
+            "preview": "72085082600386048",
+            "color": [
+              1,
+              25,
+              46,
+              46
+            ]
+          },
+          {
+            "name": "Background Color 2",
+            "type": "number",
+            "preview": "72113670624134144",
+            "color": [
+              1,
+              51,
+              89,
+              68
+            ]
+          },
+          {
+            "name": "Background Color 1",
+            "type": "number",
+            "preview": "72068589439422464",
+            "color": [
+              1,
+              10,
+              17,
+              16
+            ]
+          },
+          {
+            "name": "Portrait Zoom",
+            "type": "number",
+            "preview": "100"
+          },
+          {
+            "name": "Title Scale",
+            "type": "number",
+            "preview": "100"
+          },
+          {
+            "name": "Title Line Spacing",
+            "type": "number",
+            "preview": "132"
+          },
+          {
+            "name": "Panel Opacity",
+            "type": "number",
+            "preview": "72"
+          },
+          {
+            "name": "Panel Tint",
+            "type": "number",
+            "preview": "72079584874470144"
+          },
+          {
+            "name": "Secondary Text Color",
+            "type": "number",
+            "preview": "72259907549708032",
+            "color": [
+              1,
+              184,
+              201,
+              191
+            ]
+          },
+          {
+            "name": "Accent Color",
+            "type": "number",
+            "preview": "18374827221069115000",
+            "color": [
+              255,
+              128,
+              233,
+              176
+            ]
+          },
+          {
+            "name": "Text Color",
+            "type": "number",
+            "preview": "72324779507512320",
+            "color": [
+              1,
+              243,
+              247,
+              244
+            ]
+          }
+        ],
+        "motion": [
+          {
+            "index": 0,
+            "name": "Position",
+            "value": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "index": 1,
+            "name": "Scale",
+            "value": 100
+          },
+          {
+            "index": 2,
+            "name": "Scale Width",
+            "value": 100
+          },
+          {
+            "index": 3,
+            "name": "Uniform Scale",
+            "value": true
+          },
+          {
+            "index": 4,
+            "name": "Rotation",
+            "value": 0
+          },
+          {
+            "index": 5,
+            "name": "Anchor Point",
+            "value": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "index": 6,
+            "name": "Anti-flicker Filter",
+            "value": 0
+          },
+          {
+            "index": 7,
+            "name": "Crop Left",
+            "value": 0
+          },
+          {
+            "index": 8,
+            "name": "Crop Top",
+            "value": 0
+          },
+          {
+            "index": 9,
+            "name": "Crop Right",
+            "value": 0
+          },
+          {
+            "index": 10,
+            "name": "Crop Bottom",
+            "value": 0
+          }
+        ],
+        "components": [
+          {
+            "name": "Opacity",
+            "matchName": "AE.ADBE Opacity"
+          },
+          {
+            "name": "Motion",
+            "matchName": "AE.ADBE Motion"
+          },
+          {
+            "name": "Graphic Parameters",
+            "matchName": "AE.ADBE Capsule"
+          }
+        ],
+        "component": true,
+        "propertyCount": 20
+      },
+      {
+        "track": 2,
+        "name": "Hafez Glass editorial-intro-v4-edit-test L0",
+        "start": 6,
+        "end": 12,
+        "inPoint": 3600,
+        "outPoint": 3606,
+        "disabled": false,
+        "params": [
+          {
+            "name": "Topic Label",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[24],\"fontTextRunLength\":[14],\"textEditValue\":\"موضوع این قسمت\"}"
+          },
+          {
+            "name": "Subtitle",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Regular\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[32],\"fontTextRunLength\":[39],\"textEditValue\":\"نمونهٔ ویرایش متن، فونت و رنگ در پریمیر\"}"
+          },
+          {
+            "name": "Title Line 2",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Bold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[92],\"fontTextRunLength\":[12],\"textEditValue\":\"تصمیم احساسی\"}"
+          },
+          {
+            "name": "Title Line 1",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"AbarHighFaNum-Bold\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[92],\"fontTextRunLength\":[9],\"textEditValue\":\"مشکل اول:\"}"
+          },
+          {
+            "name": "English Eyebrow",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[23],\"fontTextRunLength\":[21],\"textEditValue\":\"MAKE BETTER DECISIONS\"}"
+          },
+          {
+            "name": "Brand",
+            "type": "string",
+            "preview": "{\"capPropFontEdit\":true,\"capPropFontFauxStyleEdit\":false,\"capPropFontSizeEdit\":true,\"capPropTextRunCount\":1,\"fontEditValue\":[\"ArialMT\"],\"fontFSAllCapsValue\":[false],\"fontFSBoldValue\":[false],\"fontFSItalicValue\":[false],\"fontFSSmallCapsValue\":[false],\"fontSizeEditValue\":[20],\"fontTextRunLength\":[8],\"textEditValue\":\"HAFEZ-FX\"}"
+          },
+          {
+            "name": "Portrait Video / Replace Media",
+            "type": "string",
+            "preview": "00000000-0000-0000-0000-000000000000"
+          },
+          {
+            "name": "Background Color 5",
+            "type": "number",
+            "preview": "72075186727295232",
+            "color": [
+              1,
+              16,
+              30,
+              25
+            ]
+          },
+          {
+            "name": "Background Color 4",
+            "type": "number",
+            "preview": "72070788563341824",
+            "color": [
+              1,
+              12,
+              23,
+              18
+            ]
+          },
+          {
+            "name": "Background Color 3",
+            "type": "number",
+            "preview": "72085082600386048",
+            "color": [
+              1,
+              25,
+              46,
+              46
+            ]
+          },
+          {
+            "name": "Background Color 2",
+            "type": "number",
+            "preview": "72113670624134144",
+            "color": [
+              1,
+              51,
+              89,
+              68
+            ]
+          },
+          {
+            "name": "Background Color 1",
+            "type": "number",
+            "preview": "72068589439422464",
+            "color": [
+              1,
+              10,
+              17,
+              16
+            ]
+          },
+          {
+            "name": "Portrait Zoom",
+            "type": "number",
+            "preview": "100"
+          },
+          {
+            "name": "Title Scale",
+            "type": "number",
+            "preview": "100"
+          },
+          {
+            "name": "Title Line Spacing",
+            "type": "number",
+            "preview": "120"
+          },
+          {
+            "name": "Panel Opacity",
+            "type": "number",
+            "preview": "45"
+          },
+          {
+            "name": "Panel Tint",
+            "type": "number",
+            "preview": "72079584874470144"
+          },
+          {
+            "name": "Secondary Text Color",
+            "type": "number",
+            "preview": "72259907549708032",
+            "color": [
+              1,
+              184,
+              201,
+              191
+            ]
+          },
+          {
+            "name": "Accent Color",
+            "type": "number",
+            "preview": "18374874499716794000",
+            "color": [
+              255,
+              171,
+              212,
+              199
+            ]
+          },
+          {
+            "name": "Text Color",
+            "type": "number",
+            "preview": "72324779507512320",
+            "color": [
+              1,
+              243,
+              247,
+              244
+            ]
+          }
+        ],
+        "motion": [
+          {
+            "index": 0,
+            "name": "Position",
+            "value": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "index": 1,
+            "name": "Scale",
+            "value": 100
+          },
+          {
+            "index": 2,
+            "name": "Scale Width",
+            "value": 100
+          },
+          {
+            "index": 3,
+            "name": "Uniform Scale",
+            "value": true
+          },
+          {
+            "index": 4,
+            "name": "Rotation",
+            "value": 0
+          },
+          {
+            "index": 5,
+            "name": "Anchor Point",
+            "value": [
+              0.5,
+              0.5
+            ]
+          },
+          {
+            "index": 6,
+            "name": "Anti-flicker Filter",
+            "value": 0
+          },
+          {
+            "index": 7,
+            "name": "Crop Left",
+            "value": 0
+          },
+          {
+            "index": 8,
+            "name": "Crop Top",
+            "value": 0
+          },
+          {
+            "index": 9,
+            "name": "Crop Right",
+            "value": 0
+          },
+          {
+            "index": 10,
+            "name": "Crop Bottom",
+            "value": 0
+          }
+        ],
+        "components": [
+          {
+            "name": "Opacity",
+            "matchName": "AE.ADBE Opacity"
+          },
+          {
+            "name": "Motion",
+            "matchName": "AE.ADBE Motion"
+          },
+          {
+            "name": "Graphic Parameters",
+            "matchName": "AE.ADBE Capsule"
+          }
+        ],
+        "component": true,
+        "propertyCount": 20
+      }
+    ],
+    "project": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\Hafez-FX-Intro-Editable-Test.prproj",
+    "sequence_id": "560bf26b-e6fd-4958-9732-b680e9b37dcb",
+    "frameSize": [
+      1920,
+      1080
+    ],
+    "timebase": "8467200000",
+    "sourceTracks": [
+      {
+        "kind": "video",
+        "index": 0,
+        "muted": false,
+        "clips": [
+          {
+            "nodeId": "000f4242",
+            "name": "Portrait reference A",
+            "startTicks": "0",
+            "endTicks": "1524096000000",
+            "inTicks": "0",
+            "outTicks": "1524096000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\portrait-demo.mp4",
+            "disabled": false
+          },
+          {
+            "nodeId": "000f4243",
+            "name": "Portrait reference B",
+            "startTicks": "1524096000000",
+            "endTicks": "3048192000000",
+            "inTicks": "0",
+            "outTicks": "1524096000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\portrait-demo.mp4",
+            "disabled": false
+          }
+        ]
+      },
+      {
+        "kind": "video",
+        "index": 1,
+        "muted": false,
+        "clips": [
+          {
+            "nodeId": "000f4244",
+            "name": "Hafez Glass editorial-intro-original L0",
+            "startTicks": "0",
+            "endTicks": "1524096000000",
+            "inTicks": "914457600000000",
+            "outTicks": "915981696000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\Motion Graphics Template Media\\e2494de8-bdeb-4fc3-bd16-47a287e2444a\\Hafez-FX Editorial Intro v3.aegraphic",
+            "disabled": true
+          },
+          {
+            "nodeId": "000f4245",
+            "name": "Hafez Glass editorial-intro-edit-test L0",
+            "startTicks": "1524096000000",
+            "endTicks": "3048192000000",
+            "inTicks": "914457600000000",
+            "outTicks": "915981696000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\Motion Graphics Template Media\\e2494de8-bdeb-4fc3-bd16-47a287e2444a\\Hafez-FX Editorial Intro v3.aegraphic",
+            "disabled": true
+          }
+        ]
+      },
+      {
+        "kind": "video",
+        "index": 2,
+        "muted": false,
+        "clips": [
+          {
+            "nodeId": "000f4246",
+            "name": "Hafez Glass editorial-intro-v4-original L0",
+            "startTicks": "0",
+            "endTicks": "1524096000000",
+            "inTicks": "914457600000000",
+            "outTicks": "915981696000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\Motion Graphics Template Media\\428ef7cd-5ed0-4d3f-96a6-e13cc28428f6\\Hafez-FX Editorial Intro v4.aegraphic",
+            "disabled": false
+          },
+          {
+            "nodeId": "000f4247",
+            "name": "Hafez Glass editorial-intro-v4-edit-test L0",
+            "startTicks": "1524096000000",
+            "endTicks": "3048192000000",
+            "inTicks": "914457600000000",
+            "outTicks": "915981696000000",
+            "mediaPath": "C:\\Users\\1SKY.IR\\.n8n\\products\\HafezStudio\\motion-pack\\modules\\01-editorial-intro\\Motion Graphics Template Media\\428ef7cd-5ed0-4d3f-96a6-e13cc28428f6\\Hafez-FX Editorial Intro v4.aegraphic",
+            "disabled": false
+          }
+        ]
+      },
+      {
+        "kind": "audio",
+        "index": 0,
+        "muted": false,
+        "clips": []
+      }
+    ]
+  }
+}

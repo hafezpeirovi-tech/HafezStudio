@@ -80,7 +80,7 @@
         var fg=frame.property('ADBE Root Vectors Group').property(1).property('ADBE Vectors Group');
         var stroke=fg.addProperty('ADBE Vector Graphic - Stroke');stroke.property('ADBE Vector Stroke Color').setValue(col('C9E7D0'));stroke.property('ADBE Vector Stroke Opacity').setValue(24);stroke.property('ADBE Vector Stroke Width').setValue(1);
         animate(frame,0,0);
-        var brand=text('Brand','HAFEZ / STUDIO',20,300,91,'B8C9BF','Regular',true);animate(brand,.02,0);
+        var brand=text('Brand','HAFEZ-FX',20,300,91,'B8C9BF','Regular',true);animate(brand,.02,0);
         var kicker=text('English Eyebrow','THE BETTER QUESTION',23,990,307,'B8C9BF','Regular',true);animate(kicker,.08,12);
         var t1=text('Title Line 1','فقط استراتژی',102,990,438,'F3F7F4','ExtraBold',false);animate(t1,.12,24);
         var t2=text('Title Line 2','کافی نیست.',102,990,570,'80E9B0','ExtraBold',false);animate(t2,.20,24);

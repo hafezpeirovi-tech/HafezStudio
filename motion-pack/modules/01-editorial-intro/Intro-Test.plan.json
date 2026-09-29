@@ -1,0 +1,29 @@
+{
+ "protocol":"hermes-professional-edit-v2",
+ "style_pack":"glass", "purpose":"isolated-native-qa", "publication_ready":false,
+ "expected_project_path":"C:/Users/1SKY.IR/.n8n/products/HafezStudio/motion-pack/modules/01-editorial-intro/Hafez-FX-Intro-Editable-Test.prproj",
+ "sequence":"Hafez-FX Intro - Native QA", "video_tracks":{"png_guide":2,"mogrt":1},
+ "graphics":[
+  {"id":"editorial-intro-v4-original","start":0,"end":6,"template_layers":[{
+   "template_path":"C:/Users/1SKY.IR/.n8n/products/HafezStudio/motion-pack/modules/01-editorial-intro/Hafez-FX Editorial Intro v4.mogrt","track":2,"role":"editorial-intro",
+   "typed_controls":[
+    {"name":"Brand","kind":"text","value":"HAFEZ-FX"},
+    {"name":"Title Line 1","kind":"text","value":"فقط استراتژی","font":"AbarHighFaNum-ExtraBold","fontSize":102},
+    {"name":"Title Line 2","kind":"text","value":"کافی نیست.","font":"AbarHighFaNum-ExtraBold","fontSize":102},
+    {"name":"Accent Color","kind":"color","value":[0.502,0.914,0.69,1]},
+    {"name":"Title Line Spacing","kind":"scalar","value":132}
+   ]}]},
+  {"id":"editorial-intro-v4-edit-test","start":6,"end":12,"template_layers":[{
+   "template_path":"C:/Users/1SKY.IR/.n8n/products/HafezStudio/motion-pack/modules/01-editorial-intro/Hafez-FX Editorial Intro v4.mogrt","track":2,"role":"editorial-intro",
+   "typed_controls":[
+    {"name":"Brand","kind":"text","value":"HAFEZ-FX"},
+    {"name":"English Eyebrow","kind":"text","value":"MAKE BETTER DECISIONS"},
+    {"name":"Title Line 1","kind":"text","value":"مشکل اول:","font":"AbarHighFaNum-Bold","fontSize":92},
+    {"name":"Title Line 2","kind":"text","value":"تصمیم احساسی","font":"AbarHighFaNum-Bold","fontSize":92},
+    {"name":"Subtitle","kind":"text","value":"نمونهٔ ویرایش متن، فونت و رنگ در پریمیر"},
+    {"name":"Accent Color","kind":"color","value":[0.67,0.83,0.78,1]},
+    {"name":"Title Line Spacing","kind":"scalar","value":120},
+    {"name":"Panel Opacity","kind":"scalar","value":45}
+   ]}]}
+ ]
+}
