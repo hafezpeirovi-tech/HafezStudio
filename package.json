@@ -10,7 +10,9 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
-    "check": "node --check electron/main.js && node --check electron/preload.js && node --check app/renderer.js",
+    "check": "node --check electron/main.js && node --check electron/preload.js && node --check app/renderer.js && node --check electron/reels.js && node --check app/reels.js",
+    "reels": "electron . --reels",
+    "test:reels": "node --test electron/reels.test.js",
     "dist:win": "electron-builder --win nsis --x64",
     "pack:win": "electron-builder --win dir --x64"
   },

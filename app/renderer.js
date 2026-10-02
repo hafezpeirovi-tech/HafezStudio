@@ -255,6 +255,15 @@ function selectView(view) {
 function selectMode(mode) {
   state.mode = mode;
   document.querySelectorAll(".mode").forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
+  if (mode === "reels") {
+    document.body.dataset.view = "reels";
+    document.querySelectorAll(".nav").forEach(button => button.classList.remove("active"));
+    $("#plannedWorkspace").hidden = true;
+    document.querySelectorAll(".studio-view").forEach(panel => { panel.hidden = panel.dataset.workspace !== "reels"; });
+    $("#workspaceKicker").textContent = "FROM YOUR FINAL CUT · EDITABLE IN PREMIERE";
+    $("#workspaceTitle").textContent = "Reels Studio";
+    return;
+  }
   if (mode === "upscale") {
     document.body.dataset.view = "upscale";
     document.querySelectorAll(".nav").forEach(button => button.classList.remove("active"));
@@ -482,7 +491,7 @@ async function initialize() {
   state.resources = await window.hermes.getResourcePaths();
   setupCustomSelects();
   await runDoctor();
-  selectMode("youtube");
+  selectMode(new URLSearchParams(window.location.search).get("mode") === "reels" ? "reels" : "youtube");
   selectView("director");
   updateDirectorReadiness();
   renderJobProgress({ progress: 0, stage: "analyze", message: "آماده برای شروع", jobState: "ready" });

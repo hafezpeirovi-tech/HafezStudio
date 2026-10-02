@@ -11,6 +11,12 @@ win-unpacked/
 *.dll
 dist/
 **/dist/
+!motion-pack/reels/dist/
+!motion-pack/reels/dist/v2/
+!motion-pack/reels/dist/v2/*.mogrt
+motion-pack/reels/dist/*.mogrt
+motion-pack/reels/preview/
+motion-pack/reels/*result.json
 build/hermes-engine/
 build/ctranslate2/
 

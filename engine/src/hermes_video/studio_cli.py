@@ -533,6 +533,8 @@ def _add_typography_arguments(parser: argparse.ArgumentParser) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="hermes-engine")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    reels_parser = subparsers.add_parser("reels", help="Create editable Reels from finished source media")
+    reels_parser.add_argument("--request", required=True)
     subparsers.add_parser("glass-status", help="Read local Glass inventory and honest readiness status")
     editorial = subparsers.add_parser('glass-editorial', help='Compile existing reviewed cues into current-source editable MOGRTs; no final export')
     editorial.add_argument('--manifest',required=True)
@@ -585,6 +587,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     try:
         args = build_parser().parse_args()
+        if args.command == "reels":
+            from reels import main as reels_main
+            return reels_main(["--request", args.request])
         if args.command == "glass-status":
             from glass_pack import capability_report
             _json_print(capability_report())

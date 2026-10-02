@@ -8,6 +8,7 @@ const path = require("path");
 const { findPreparedJob } = require("./job-recovery");
 const glassFinisher = require("./glass-finisher");
 const { UpscaleManager } = require("./upscale");
+const { ReelsManager } = require("./reels");
 
 let mainWindow;
 let activeJob = null;
@@ -27,10 +28,16 @@ const upscale = new UpscaleManager({
   workerPath: isPackaged() ? path.join(process.resourcesPath, "app.asar.unpacked", "electron", "upscale-worker.py") : undefined,
   tools: path.join(resourceRoot(), "runtime", "tools"),
   outputRoot: () => loadConfig().outputRoot,
-  editingBusy: () => !!activeJob,
+  editingBusy: () => !!activeJob || reels.status().running,
   send: event => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send("upscale:event", event); }
 });
 const premiereRuntime = () => path.join(app.getPath("appData"), "Adobe", "CEP", "extensions", "ir.hafez.studio.cep", "runtime");
+const reels = new ReelsManager({
+  root: resourceRoot, outputRoot: () => loadConfig().outputRoot,
+  busy: () => !!activeJob || !!upscale.active || upscale.externalBusy(),
+  premiereRuntime, invocation: request => engineInvocation("reels", ["--request", request]),
+  send: event => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send("reels:event", event); }
+});
 
 function userConfigPath() {
   return path.join(app.getPath("userData"), "settings.json");
@@ -271,7 +278,7 @@ function performanceEnvironment(profile) {
 }
 
 function runEngine(command, args, jobId = null, options = {}) {
-  if (activeJob) throw new Error("یک Job در حال اجراست.");
+  if (activeJob || reels.status().running) throw new Error("یک Job در حال اجراست.");
   const invocation = engineInvocation(command, args);
   const engineRoot = resourceRoot();
   const outputDir = options.outputDir || "";
@@ -394,7 +401,7 @@ function createWindow() {
       sandbox: true
     }
   });
-  mainWindow.loadFile(path.join(sourceRoot(), "app", "index.html"));
+  mainWindow.loadFile(path.join(sourceRoot(), "app", "index.html"), { query: { mode: process.argv.includes("--reels") ? "reels" : "youtube" } });
   mainWindow.once("ready-to-show", () => mainWindow.show());
 }
 
@@ -525,11 +532,20 @@ ipcMain.handle("path:show", (_, target) => shell.showItemInFolder(target));
 ipcMain.handle("upscale:status", () => upscale.status());
 ipcMain.handle("upscale:start", (_, payload) => upscale.start(payload));
 ipcMain.handle("upscale:cancel", () => upscale.cancel());
+ipcMain.handle("reels:status", () => reels.status());
+ipcMain.handle("reels:start", (_, payload) => reels.start(payload));
+ipcMain.handle("reels:cancel", () => reels.cancel());
+ipcMain.handle("reels:file", async (_, kind) => {
+  const extensions = { project: ["prproj"], preset: ["epr"], srt: ["srt"] }[kind];
+  if (!extensions) throw new Error("Unsupported Reels file type");
+  const selected = await dialog.showOpenDialog(mainWindow, { properties: ["openFile"], filters: [{name: kind, extensions}] });
+  return selected.canceled ? null : selected.filePaths[0];
+});
 app.on("before-quit", event => {
-  if (upscale.active) {
+  if (upscale.active || reels.active) {
     event.preventDefault();
     if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show();
-    dialog.showMessageBoxSync({ type: "info", message: "Upscale در حال اجراست. ابتدا از بخش Upscale توقف را بزن و منتظر پایان بمان." });
+    dialog.showMessageBoxSync({ type: "info", message: "پردازش در حال اجراست. ابتدا از بخش مربوط توقف را بزن و منتظر پایان بمان؛ هنگام رندر Adobe از داخل Adobe توقف بده." });
   }
 });
 

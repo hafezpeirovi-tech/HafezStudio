@@ -36,6 +36,7 @@
   }
 
   function writeResult(requestId, payload) {
+    glassHeartbeat(); // Publish idle before a caller consumes the completion receipt.
     var result = {
       request_id: requestId || "manual",
       completed_at: new Date().toISOString(),
@@ -102,12 +103,29 @@
     try {
       var request = parseJsonData(queued.data);
       if (!request.plan_path && !request.request_id) return; // Empty shipped queue.
-      if (request.mode && ["apply", "inspect", "import_xml", "finish_glass"].indexOf(request.mode) < 0) throw new Error("حالت درخواست پشتیبانی نمی‌شود.");
+      if (request.mode && ["apply", "inspect", "import_xml", "finish_glass", "reels_export", "reels_finish", "reels_preview"].indexOf(request.mode) < 0) throw new Error("حالت درخواست پشتیبانی نمی‌شود.");
       if (request.mode !== "import_xml" && !request.plan_path) throw new Error("plan_path در درخواست وجود ندارد.");
       if (request.mode === "import_xml" && !request.request_id) throw new Error("request_id برای import لازم است.");
       var requestId = String(request.request_id || request.plan_path);
       if (localStorage.getItem("hafez-last-request") === requestId) return;
       localStorage.setItem("hafez-last-request", requestId);
+      if (request.mode === "reels_export" || request.mode === "reels_finish" || request.mode === "reels_preview") {
+        running = true; applyButton.disabled = true; stateNode.textContent = "در حال ساخت Reels";
+        window.cep.fs.deleteFile(queuePath);
+        var reelsCall = "$.evalFile(new File(" + jsxString(extensionPath("jsx/hafez.jsx")) + "));" +
+          "$.evalFile(new File(" + jsxString(extensionPath("jsx/reels.jsx")) + "));" +
+          "$._hafez.runReels(" + jsxString(JSON.stringify(request)) + ")";
+        evalScript(reelsCall, function (raw) {
+          running = false; applyButton.disabled = false;
+          try {
+            var result = parseJsonData(raw);
+            stateNode.textContent = result.ok ? "Reels آماده شد" : "نیاز به بررسی";
+            if (result.message) log(result.message);
+            writeResult(requestId, result);
+          } catch (error) { writeResult(requestId, {ok:false,message:"پاسخ نامعتبر Reels"}); }
+        });
+        return;
+      }
       if (request.mode === "finish_glass") {
         running = true; applyButton.disabled = true; stateNode.textContent = "ساخت بازبینی Glass";
         window.cep.fs.deleteFile(queuePath);
@@ -191,7 +209,7 @@
   }
   function glassHeartbeat() {
     window.cep.fs.writeFile(extensionPath("runtime/glass-heartbeat.json"),
-      JSON.stringify({version:"glass-review-v1",at:Date.now(),running:running}));
+      JSON.stringify({version:"glass-review-v1",reels:"hafez-reels-v1",at:Date.now(),running:running}));
   }
   glassHeartbeat();
   window.setInterval(glassHeartbeat, 10000);

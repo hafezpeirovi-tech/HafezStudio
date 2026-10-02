@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self' data:;" />
     <title>Hafez Studio</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="reels.css" />
   </head>
   <body data-shell="studio">
     <svg class="icon-sprite" aria-hidden="true">
@@ -39,7 +40,7 @@
         </div>
         <div class="product-modes" role="tablist" aria-label="نوع تولید">
           <button class="mode active" data-mode="youtube"><span><svg class="thin-icon"><use href="#i-play"></use></svg></span><b>YouTube</b><em>ACTIVE</em></button>
-          <button class="mode" data-mode="reels"><span><svg class="thin-icon"><use href="#i-layout"></use></svg></span><b>Reels</b><em>NEXT</em></button>
+          <button class="mode" data-mode="reels"><span><svg class="thin-icon"><use href="#i-layout"></use></svg></span><b>Reels</b><em>PREVIEW</em></button>
           <button class="mode" data-mode="podcast"><span><svg class="thin-icon"><use href="#i-podcast"></use></svg></span><b>Podcast</b><em>LATER</em></button>
           <button class="mode" data-mode="upscale"><span><svg class="thin-icon"><use href="#i-sparkles"></use></svg></span><b>Upscale</b><em>LOCAL AI</em></button>
         </div>
@@ -277,6 +278,20 @@
           <div class="tool-footer"><span>اجرای مستقیم برنامه به Telegram وابسته نیست.</span><button id="showPremierePlugin" class="ghost">نمایش Premiere Plugin</button></div>
         </section>
 
+        <section class="studio-view tool-view glass reels-workspace" data-workspace="reels" hidden>
+          <div class="reels-intro"><div><p class="reels-eyebrow">YOUR STORY. A NEW FRAME.</p><h2>از تدوین نهایی، تا ریلز قابل‌ویرایش</h2><p>بخش‌های مستقل از ویدیو، زیرنویس فارسی و موشن روی لایه‌های جدا در Premiere.</p></div><span class="reels-badge">9:16<br>1080 × 1920</span></div>
+          <div class="reels-grid"><form id="reelsForm" class="reels-form">
+            <label>ورودی<select id="reelsInputMode"><option value="project">پروژهٔ ذخیره‌شدهٔ Premiere</option><option value="video">ویدیوی خروجی تدوین‌شده</option></select></label>
+            <div class="reels-file"><button type="button" id="reelsPickSource">انتخاب فایل</button><input id="reelsSource" readonly placeholder="فایل منبع را انتخاب کن" dir="ltr" /></div>
+            <div id="reelsProjectFields"><label>نام دقیق سکانس نهایی<input id="reelsSequence" placeholder="03 - Hafez Director Cut" dir="ltr" /></label><div class="reels-file"><button type="button" id="reelsPickPreset">Preset صوتی اختیاری</button><input id="reelsPreset" readonly placeholder="WAV 48kHz پیش‌فرض Premiere 2026" dir="ltr" /></div><small>صدا برای تحلیل استخراج می‌شود؛ تصویر و اصلاح رنگ در سکانس اصلی حفظ می‌شوند. پنل Hafez Finisher در Premiere باز باشد.</small></div>
+            <div class="reels-pair"><label>تعداد تا<select id="reelsCount"><option>3</option><option>4</option><option>5</option><option selected>6</option></select></label><label>انتخاب بخش‌ها<select id="reelsSelector"><option value="local">پیشنهاد آفلاین · نیازمند بازبینی</option><option value="gemini">Gemini · تحلیل مفهوم</option></select></label></div>
+            <div class="reels-pair"><label>حداقل زمان (ثانیه)<input id="reelsMin" type="number" min="8" max="90" value="20" required /></label><label>حداکثر زمان (ثانیه)<input id="reelsMax" type="number" min="8" max="90" value="60" required /></label></div>
+            <label>سبک موشن<select id="reelsStyle"><option value="editorial">تایپوگرافی زرد و کرم</option><option value="editorial-3d">تایپوگرافی + کارت مکث با عمق</option></select></label>
+            <div class="reels-file"><button type="button" id="reelsPickSrt">SRT اختیاری</button><input id="reelsSrt" readonly placeholder="در حالت عادی متن خودکار استخراج می‌شود" dir="ltr" /><button type="button" id="reelsClearSrt" aria-label="پاک کردن انتخاب زیرنویس">×</button></div>
+            <small id="reelsReadiness">در حال بررسی ابزارها…</small>
+            <div class="reels-actions"><button id="reelsStart" type="submit" class="primary">ساخت پروژهٔ Reels</button><button id="reelsCancel" type="button" disabled>توقف</button></div>
+          </form><div class="reels-review"><div class="reels-style-preview" aria-label="نمای شماتیک چینش ریلز"><div class="reels-footage">ویدیوی تدوین‌شدهٔ تو</div><strong>یک نکته<br><em>ارزش دیدن دارد.</em></strong><span>متن واقعی از گفتار ویدیو انتخاب می‌شود</span></div><p>تعداد خروجی تضمینی نیست؛ بخش ضعیف نباید فقط برای پرکردن تعداد انتخاب شود.</p><progress id="reelsProgress" max="100" value="0"></progress><p id="reelsMessage" role="status">آمادهٔ دریافت پروژه</p><button id="reelsOpen" type="button" hidden>بازکردن پوشهٔ خروجی</button><div id="reelsResults"></div></div></div>
+        </section>
         <section class="studio-view tool-view glass" data-workspace="upscale" hidden>
           <div class="tool-hero"><div><p class="kicker">LOCAL AI · YOUR CHOICE</p><h2>جزئیات بیشتر؛ با موتور دلخواهت</h2><p>WebSR سریع یا SeedVR2 سنگین · فایل اصلی حفظ می‌شود · بدون آپلود ویدیو</p></div><button id="upRefresh" class="ghost">بررسی نصب</button></div>
           <p id="upInstalled" role="status">در حال بررسی محیط مستقل…</p>
@@ -310,5 +325,6 @@
     </div>
     <script src="renderer.js"></script>
     <script src="upscale.js"></script>
+    <script src="reels.js"></script>
   </body>
 </html>
