@@ -4,6 +4,8 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("hermes", {
   getConfig: () => ipcRenderer.invoke("config:get"),
+  getLatestReview: () => ipcRenderer.invoke("review:latest"),
+  openLatestReview: () => ipcRenderer.invoke("review:open"),
   getBrandTokens: () => ipcRenderer.invoke("brand:get-tokens"),
   saveConfig: (config) => ipcRenderer.invoke("config:save", config),
   getResourcePaths: () => ipcRenderer.invoke("resource:paths"),

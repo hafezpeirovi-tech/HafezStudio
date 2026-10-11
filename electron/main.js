@@ -7,6 +7,7 @@ const os = require("os");
 const path = require("path");
 const { findPreparedJob } = require("./job-recovery");
 const glassFinisher = require("./glass-finisher");
+const reviewDelivery = require("./review-delivery");
 const { UpscaleManager } = require("./upscale");
 const { ReelsManager } = require("./reels");
 
@@ -369,7 +370,7 @@ function runEngine(command, args, jobId = null, options = {}) {
           nativeCaptions:true, compositingReviewRequired:native.compositing_review_required, publicationReady:false};
       } catch (error) { nativeError = error.message; }
     }
-    emit("job:state", {
+    const completion = {
       state: code === 0 && jobState.result && !nativeError ? "completed" : "failed",
       message: nativeError || undefined,
       jobId,
@@ -378,7 +379,12 @@ function runEngine(command, args, jobId = null, options = {}) {
       elapsedMs: Date.now() - jobState.startedAt,
       result: jobState.result,
       summary: jobState.result?.summary || null
-    });
+    };
+    try { reviewDelivery.save(app.getPath("userData"), completion); }
+    catch (error) {
+      emit("job:log", { kind: "warning", line: `ثبت دسترسی پایدار خروجی ناموفق بود: ${error.message}`, jobId });
+    }
+    emit("job:state", completion);
     if (activeJob === jobState) activeJob = null;
   });
   return { pid: child.pid, jobId, outputDir };
@@ -406,6 +412,14 @@ function createWindow() {
 }
 
 ipcMain.handle("config:get", () => loadConfig());
+ipcMain.handle("review:latest", () => reviewDelivery.latest(app.getPath("userData")));
+ipcMain.handle("review:open", async () => {
+  const delivery = reviewDelivery.latest(app.getPath("userData"));
+  if (!delivery.review) throw Error("پروژهٔ بازبینی در مسیر ذخیره‌شده در دسترس نیست.");
+  const error = await shell.openPath(delivery.review.project);
+  if (error) throw Error(error);
+  return true;
+});
 ipcMain.handle("config:save", (_, config) => saveConfig(config));
 ipcMain.handle("brand:get-tokens", () => loadBrandTokens());
 ipcMain.handle("resource:paths", () => {

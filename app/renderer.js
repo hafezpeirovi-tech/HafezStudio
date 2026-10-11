@@ -489,12 +489,62 @@ async function initialize() {
   applyBrandTokens(await window.hermes.getBrandTokens());
   applyConfig(await window.hermes.getConfig());
   state.resources = await window.hermes.getResourcePaths();
+  await refreshReviewDelivery();
   setupCustomSelects();
   await runDoctor();
   selectMode(new URLSearchParams(window.location.search).get("mode") === "reels" ? "reels" : "youtube");
   selectView("director");
   updateDirectorReadiness();
   renderJobProgress({ progress: 0, stage: "analyze", message: "آماده برای شروع", jobState: "ready" });
+}
+
+async function refreshReviewDelivery() {
+  if (!window.hermes.getLatestReview) return;
+  let card = document.querySelector("#reviewDelivery");
+  if (!card) {
+    card = document.createElement("div");
+    card.id = "reviewDelivery";
+    card.className = "review-delivery";
+    card.style.cssText = "position:relative;display:none;flex-wrap:wrap;gap:12px;padding:20px;margin-top:16px;border:1px solid #55ff7233;border-radius:24px;background:linear-gradient(130deg,#172522,#060c09);direction:rtl;";
+    card.hidden = true;
+    document.querySelector("#jobSummary").closest("section").after(card);
+  }
+  try {
+    const delivery = await window.hermes.getLatestReview();
+    card.replaceChildren();
+    card.hidden = delivery.status === "none";
+    card.style.display = card.hidden ? "none" : "flex";
+    const director = card.parentElement;
+    director.style.gridTemplateRows = card.hidden ? "" : "minmax(600px, 1fr) minmax(244px, auto) auto";
+    director.style.overflowY = card.hidden ? "" : "auto";
+    if (card.hidden) return;
+    const notice = document.createElement("p");
+    notice.style.cssText = "width:100%;margin:0;font-size:14px;color:#eef8f1;";
+    if (!delivery.review) {
+      notice.textContent = "آخرین پروژهٔ بازبینی در مسیر قبلی در دسترس نیست؛ فایل یا رسید آن جابه‌جا شده است.";
+      card.append(notice);
+      return;
+    }
+    const review = delivery.review;
+    notice.textContent = `آخرین پروژهٔ موفق Premiere · ${review.mogrtCount} MOGRT قابل‌ویرایش · نیازمند بازبینی شما`;
+    const location = document.createElement("p");
+    location.textContent = review.project;
+    location.dir = "ltr";
+    location.style.overflowWrap = "anywhere";
+    location.style.cssText += ";width:100%;margin:0;font-size:12px;color:#a9b9b1;";
+    const open = document.createElement("button");
+    open.className = "ghost";
+    open.textContent = "بازکردن پروژه در Premiere";
+    open.addEventListener("click", async () => {
+      try { await window.hermes.openLatestReview(); }
+      catch (error) { appendLog(error.message || String(error), "error"); await refreshReviewDelivery(); }
+    });
+    const reveal = document.createElement("button");
+    reveal.className = "ghost";
+    reveal.textContent = "نمایش فایل پروژه";
+    reveal.addEventListener("click", () => window.hermes.showPath(review.project));
+    card.append(notice, location, open, reveal);
+  } catch (error) { appendLog(`خواندن پروژهٔ قبلی ناموفق بود: ${error.message}`, "warning"); }
 }
 
 $("#cam1Picker").addEventListener("click", async () => {
@@ -639,6 +689,7 @@ window.hermes.onJobState((event) => {
     return;
   }
   const completed = event.state === "completed";
+  refreshReviewDelivery();
   setRunning(false, completed ? "completed" : "failed");
   renderJobProgress({
     progress: completed ? 100 : state.progress,
