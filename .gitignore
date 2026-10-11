@@ -19,6 +19,7 @@ motion-pack/reels/preview/
 motion-pack/reels/*result.json
 build/hermes-engine/
 build/ctranslate2/
+engine/editorial-candidate-*/
 
 # Python
 __pycache__/
@@ -35,6 +36,7 @@ venv/
 runtime/models/
 runtime/upscale/
 runtime/tools/
+runtime/editorial/
 *.bin
 *.onnx
 

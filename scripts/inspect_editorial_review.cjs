@@ -9,7 +9,7 @@ const requestFile=path.join(folder,'inspect-request.json');
 if(process.argv[2]==='dispatch') {
   broker.preflight(runtime);
   const summary=read(path.join(folder,'engine-validation.json'));
-  const receipt=read(path.join(folder,'native-receipt.json')).result;
+  const receipt=read(path.join(path.dirname(summary.plan),'native-receipt.json')).result;
   if(!receipt?.ok || !receipt.saved || receipt.project!==summary.expectedProject) throw Error('No matching saved review');
   const request={mode:'inspect',request_id:crypto.randomUUID(),plan_path:summary.plan,
     expected_project_path:receipt.project,expected_sequence_name:receipt.sequence,

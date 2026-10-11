@@ -1,17 +1,32 @@
 import copy
+import os
 import sys
 import unittest
+from unittest.mock import patch
 from fractions import Fraction
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'engine/src/hermes_video'))
 from chapter_timeline import InsertionMap, Insertion
-from glass_motion_roles import select_numbered, select_roles, role_layers
+from glass_motion_roles import select_numbered, select_roles, role_layers, enabled, review_notes
 from glass_pack import load_library, validate_plan, DEFAULT_PALETTE
 
 
 class MotionRoleTests(unittest.TestCase):
+    def test_default_and_explicit_legacy_rollback(self):
+        with patch.dict(os.environ,{},clear=True):
+            self.assertTrue(enabled())
+            os.environ['HAFEZ_GLASS_MOTION_ROLES_QA']='0'
+            self.assertFalse(enabled())
+
+    def test_review_notes_expose_uncertain_literal_labels(self):
+        text=review_notes({'graphics':[dict(start=413.6,motion_role='numbered-point',
+            semantic_source=dict(label='تست چهارم',display_text='',source_review_required=True))]})
+        self.assertIn('06:53',text)
+        self.assertIn('تست چهارم',text)
+        self.assertIn('کم‌اطمینان',text)
+
     def fixture(self, text='مشکل اول فقط به سود نگاه نکن.'):
         words=[dict(id='w'+str(i), text=t, start=40+i*.3, end=40+i*.3+.25, trusted=True)
                for i,t in enumerate(text.split())]
@@ -73,10 +88,11 @@ class MotionRoleTests(unittest.TestCase):
         numbered=role_layers(lib,dict(motion_role='numbered-point',label='مشکل اول',display_text='فقط به سود نگاه نکن.'),ROOT)
         emphasis=role_layers(lib,dict(motion_role='emphasis',display_text='مدیریت ریسک'),ROOT)
         self.assertEqual(len(numbered),2)
-        self.assertEqual(len(emphasis),1)
+        self.assertEqual(len(emphasis),2)
         self.assertNotEqual(numbered[-1]['asset_id'],emphasis[-1]['asset_id'])
-        position=next(c for c in emphasis[0]['typed_controls'] if c['name']=='Global Position')
-        self.assertEqual(position['value'],[.5,.66])
+        position=next(c for c in emphasis[-1]['typed_controls'] if c['name']=='Global Position')
+        self.assertEqual(position['value'],[.5,.5])
+        self.assertEqual([c['track'] for c in emphasis],[2,3])
         colors={c['name']:c['paletteToken'] for c in numbered[-1]['typed_controls'] if c['kind']=='color'}
         self.assertEqual(colors,{'Text 1':'text','Text 2':'accent'})
         plan=dict(protocol='hermes-professional-edit-v2',style_pack='glass',purpose='isolated-native-qa',
@@ -100,6 +116,39 @@ class MotionRoleTests(unittest.TestCase):
         self.assertFalse(cards)
         self.assertEqual(rejected[0]['reason'],'emphasis-fragment-needs-review')
         self.assertEqual(story,original)
+
+    def test_uncertain_label_can_be_review_candidate_but_never_trusted_body(self):
+        words,mapping=self.fixture()
+        for i,w in enumerate(words): w.update(source_index=i,reviewable_label=True)
+        words[0]['trusted']=False
+        original=copy.deepcopy(words)
+        self.assertFalse(select_numbered(words,mapping)[0])
+        cards,_=select_numbered(words,mapping,allow_review_labels=True)
+        self.assertEqual(cards[0]['label'],'مشکل اول')
+        self.assertEqual(cards[0]['display_text'],'')
+        self.assertTrue(cards[0]['source_review_required'])
+        self.assertFalse(cards[0]['publication_ready'])
+        self.assertEqual(words,original)
+        words[1]['source_index']=3
+        self.assertFalse(select_numbered(words,mapping,allow_review_labels=True)[0])
+        words[1]['source_index']=1;words[0]['reviewable_label']=False
+        self.assertFalse(select_numbered(words,mapping,allow_review_labels=True)[0])
+
+    def test_longer_emphasis_keeps_source_bound_portrait_layout(self):
+        for phrase,role,layout in (
+                ('مدیریت ریسک','emphasis','emphasis-voice-continuous'),
+                ('فقط سود کافی نیست','editorial-emphasis','fullscreen-voice-continuous')):
+            with self.subTest(phrase=phrase):
+                words,mapping=self.fixture(phrase)
+                story={'proposals':[dict(segment_id=1,role='important-text',quote_fa=phrase,
+                    source_word_ids=[w['id'] for w in words],meaning_review=dict.fromkeys(
+                        ('standalone','faithful','important','spelling_clean'),True))]}
+                cards,rejected=select_roles(story,words,mapping)
+                self.assertFalse(rejected)
+                self.assertEqual(len(cards),1)
+                self.assertEqual(cards[0]['motion_role'],role)
+                self.assertEqual(cards[0]['layout_mode'],layout)
+                self.assertEqual(cards[0]['source_word_ids'],[w['id'] for w in words])
 
 
 if __name__=='__main__':unittest.main()

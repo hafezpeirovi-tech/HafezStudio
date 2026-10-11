@@ -68,7 +68,7 @@ def mapped_word_spans(context):
     ids=[w.get('source_word_id') for w in context['words']]
     if any(not isinstance(x,str) or not x for x in ids) or len(set(ids)) != len(ids):
         raise ValueError('Missing/duplicate source word identities')
-    for word in context['words']:
+    for source_index,word in enumerate(context['words']):
         sa,sb = word.get('acoustic_start'),word.get('acoustic_end')
         if any(type(x) not in (int,float) or not math.isfinite(x) for x in (sa,sb)) or not 0 <= sa < sb:
             raise ValueError('Missing acoustic occupancy; cannot certify a gap')
@@ -87,7 +87,12 @@ def mapped_word_spans(context):
                    and word.get('timing_origin') == 'asr-word-timestamps')
         for _,_,a,b in parts:
             spans.append(dict(start=float(a),end=float(b),id=word['source_word_id'],
-                              trusted=bool(trusted),text=word.get('text','')))
+                              trusted=bool(trusted),text=word.get('text',''),source_index=source_index,
+                              reviewable_label=bool(
+                                  word.get('media_sha256') == context['media_sha256']
+                                  and word.get('source_evidence_id') == context['evidence_id']
+                                  and word.get('timing_origin') == 'asr-word-timestamps'
+                                  and .5 <= word.get('confidence',0) <= 1)))
     return sorted(spans,key=lambda x:(x['start'],x['end']))
 
 
@@ -286,6 +291,9 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
                 native_mogrt_instances_planned=sum(len(c['template_layers']) for c in graphics),native_instances_inserted=0,
                 original_files_changed=False,publication_ready=False)
     output.mkdir(parents=True)
+    if motion_roles:
+        from glass_motion_roles import review_notes
+        (output/'MOTION_REVIEW_FA.txt').write_text(review_notes(plan),encoding='utf-8')
     (output/'editorial-candidates.json').write_text(json.dumps(editorial,ensure_ascii=False,indent=2),encoding='utf-8')
     (output/'EDITORIAL_REVIEW_FA.md').write_text(review_markdown(editorial,chosen[1:],rejected,manifest['review_segments']),encoding='utf-8')
     report['editorial'] = dict(chapter_proposals=len(editorial['chapters']),content_chapters=len(chosen)-1,

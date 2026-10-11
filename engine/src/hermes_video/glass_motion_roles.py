@@ -1,11 +1,11 @@
 """Three native editorial roles, using the owner's existing SaaS library.
 
 Numbered cues use literal retained speech, never generated summaries. All
-graphics are independent of camera media. Native visual QA remains mandatory.
-Experimental: opt in with HAFEZ_GLASS_MOTION_ROLES_QA=1. The installed
-Editorial path must remain unchanged until placement and font QA pass.
+vendor titles are independent of camera media. Longer statements retain the
+approved source-bound portrait compiler. Native visual QA remains mandatory.
 """
 import re
+import os
 from fractions import Fraction
 
 from glass_pack import typed_layer
@@ -18,7 +18,29 @@ STARTS = {'مشکل', 'نکته', 'اشتباه', 'تست', 'مرحله', 'دل�
 INCOMPLETE = {'و', 'یا', 'که', 'از', 'به', 'با', 'در', 'برای', 'تا', 'را', 'رو', 'اگر', 'چون', 'ولی'}
 
 
-def select_numbered(spans, mapping, *, occupied=(), max_cards=8, allow_label_only=False):
+def enabled():
+    """Native-tested review routing; retain an explicit legacy rollback switch."""
+    return os.environ.get('HAFEZ_GLASS_MOTION_ROLES_QA', '1') != '0'
+
+
+def review_notes(plan):
+    """Human-readable cue list, including uncertain literal labels, never approval."""
+    lines=['بازبینی موشن‌ها — پیش‌نویس قابل ویرایش، نه نسخهٔ تأییدشدهٔ انتشار', '']
+    for cue in plan['graphics']:
+        evidence=cue.get('semantic_source',{})
+        chapter=cue.get('chapter_source',{})
+        seconds=int(cue['start']); minutes,seconds=divmod(seconds,60)
+        text=evidence.get('label') or evidence.get('display_text') or chapter.get('quote_fa','')
+        if evidence.get('label') and evidence.get('display_text'):
+            text+=': '+evidence['display_text']
+        warning=' — متن کم‌اطمینان؛ با گفتار تطبیق بده' if evidence.get('source_review_required') else ''
+        lines.append(f'{minutes:02}:{seconds:02} | {cue.get("motion_role","chapter")} | {text}{warning}')
+    lines += ['', 'متن، رنگ و زمان هر MOGRT را در Premiere بازبینی کن. خروجی ویدیو خودکار گرفته نمی‌شود.']
+    return '\n'.join(lines)+'\n'
+
+
+def select_numbered(spans, mapping, *, occupied=(), max_cards=8, allow_label_only=False,
+                    allow_review_labels=False):
     """Require explicit ordinal + a complete, bounded acoustic statement.
 
     Read up to a sentence boundary/pause, never cut off a negation or silently
@@ -66,7 +88,20 @@ def select_numbered(spans, mapping, *, occupied=(), max_cards=8, allow_label_onl
                 body_text = ''
                 label_only = True
                 reason = None
-        if not all(w['trusted'] and counts[w['id']] == 1 for w in words):
+        source_review = False
+        if allow_review_labels and not all(w['trusted'] for w in words):
+            prefix=spans[i:j+1]
+            # Literal ordinal only. Never promote uncertain words to trusted or
+            # use them to generate a body, chart, claim, caption or chapter gap.
+            # Unique contiguous original-word indices prevent skipping a cut word.
+            if (all(w.get('trusted') or w.get('reviewable_label') for w in prefix)
+                    and all(counts[w['id']]==1 for w in prefix)
+                    and all(type(w.get('source_index')) is int for w in prefix)
+                    and all(b['source_index']==a['source_index']+1 for a,b in zip(prefix,prefix[1:]))):
+                words=prefix; body_text=''; label_only=True; source_review=True; reason=None
+                rejected.append(dict(source_word_id=first['id'],label=label,
+                                     reason='literal-label-added-with-source-review'))
+        if not all((w['trusted'] or source_review) and counts[w['id']] == 1 for w in words):
             reason = 'numbered-untrusted-source'
         elif any(b['start'] < a['end']-1e-6 or b['start']-a['end'] > .8 for a,b in zip(words,words[1:])):
             reason = 'numbered-discontinuous-speech'
@@ -89,12 +124,14 @@ def select_numbered(spans, mapping, *, occupied=(), max_cards=8, allow_label_onl
             frames=b-a, source_frame=start, source_word_ids=[w['id'] for w in words],
             quote_fa=' '.join(w['text'] for w in words), display_text=body_text,
             label=label, motion_role='numbered-point', layout_mode='numbered-voice-continuous',
+            source_review_required=source_review,
             label_only=label_only, selection_rule='explicit-ordinal-retained-speech', publication_ready=False))
     return chosen, rejected
 
 
 def select_roles(storyboard, spans, mapping, *, occupied=()):
-    numbered, rejected = select_numbered(spans, mapping, occupied=occupied, allow_label_only=True)
+    numbered, rejected = select_numbered(spans, mapping, occupied=occupied, allow_label_only=True,
+                                         allow_review_labels=True)
     # A grammatical fragment such as "اشتباهی" is not a useful takeaway.
     # Filter before density selection so rejected fragments cannot crowd out
     # later complete phrases. Keep the original storyboard/evidence immutable.
@@ -107,12 +144,22 @@ def select_roles(storyboard, spans, mapping, *, occupied=()):
     important, blocked = select_cutaways(dict(storyboard, proposals=proposals), spans, mapping,
         occupied=[*occupied, *((c['start_frame'],c['end_frame']) for c in numbered)])
     for cue in important:
-        cue.update(motion_role='emphasis', layout_mode='overlay-voice-continuous',
-                   placement_review_required=True, publication_ready=False)
+        # No face-safe geometry has been certified for this source shot.
+        # An opaque cutaway is deterministic; speech/timeline never pause.
+        cue.update(motion_role='emphasis', layout_mode='emphasis-voice-continuous',
+                   placement_policy='opaque-cutaway-no-face-overlap', publication_ready=False)
+        if len(tokens(cue['display_text'])) >= 3:
+            # Retain the approved source-bound portrait layout for longer
+            # statements; do not replace the whole owner's style with titles.
+            cue.update(motion_role='editorial-emphasis',layout_mode='fullscreen-voice-continuous',
+                       placement_policy='source-bound-editorial-portrait')
     return sorted([*numbered,*important], key=lambda c:c['start_frame']), [*rejected,*blocked]
 
 
 def role_layers(library, card, root):
+    if card['motion_role']=='editorial-emphasis':
+        from glass_semantic_cards import cutaway_layers
+        return cutaway_layers(library,card['display_text'],root)
     def asset(name):
         found = [a for a in library['assets'] if a['family']=='foslight-saas'
                  and a['name']==name and a['width']>a['height']]
@@ -131,12 +178,14 @@ def role_layers(library, card, root):
         title['native_motion_scale']=65
         return [bg,title]
     if card['motion_role']=='emphasis':
+        from glass_assembly import chapter_layers
+        bg = chapter_layers(library, '', '', root)[0]
         title = typed_layer(asset('SaaS Pack Title 07'), track=3, root=root,
             text={'Text 1':card['display_text']}, font='AbarHighFaNum-ExtraBold',
             # Premiere AE Point controls return normalized comp coordinates.
             # Pixel coordinates here push the title completely off screen.
-            sizes={'Text 1':105}, values={'Global Position':[.5,.66]},
+            sizes={'Text 1':105}, values={'Global Position':[.5,.5]},
             color_tokens={'Text 1':'text'})
         title['native_motion_scale']=65
-        return [title]
+        return [bg,title]
     raise ValueError('Unsupported executable motion role')

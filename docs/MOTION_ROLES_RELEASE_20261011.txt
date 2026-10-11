@@ -1,0 +1,35 @@
+Hafez Studio: hybrid editable motion role review routing
+
+Scope
+- Fresh Glass review jobs route explicit numbered points to SaaS Title 03.
+- Two-word important phrases use SaaS Title 07 on an opaque gradient cutaway.
+- Longer important phrases retain the source-bound Editorial portrait compiler.
+- Existing chapter templates and shared Editorial palette are retained.
+- Native text uses ABAR. Numbered heading/body have separate text/color controls.
+- No PNG graphics substitution, automatic final movie export or Upscale coupling.
+
+Evidence and limitations
+- Literal ordinal labels may be selected for manual review from source-bound,
+  consecutive ASR words with confidence >= 0.5. They are never promoted to trusted
+  text and never generate a fabricated explanatory body.
+- All other chapter/caption trust checks remain unchanged.
+- MOTION_REVIEW_FA.txt lists selected cue times and uncertain labels.
+- Native gallery checked title/emphasis/numbered roles; a separate full-length
+  hybrid review saved 15 MOGRT layers, including one current-media portrait.
+- Native read-only inspection confirmed 15 instances. Numbered and portrait
+  appearance checked inside Premiere. These checks do not certify a final video.
+- Generic six-second intro remains. Charts/tables/curated music are not included.
+- Vendor internal Poppins-SemiBold dependency still prompts on this machine;
+  exposed ABAR text rendered correctly. Do not silently install substitute fonts.
+
+Release
+- Engine only: same installed app shell, Reels and Upscale remain unchanged.
+- Exact-job compiled portrait evidence must never be relocated or rewritten to
+  satisfy a smoke test. Validate it at its original root; validate vendor-only
+  role routing separately against installed resource identities.
+- Build script accepts a date/revision and verifies source hashes before/after.
+- Activation validates packaged runtime, stages and hashes all engine files,
+  refuses active app/jobs, preserves the previous engine and rolls back failures.
+- HAFEZ_GLASS_MOTION_ROLES_QA=0 explicitly restores legacy routing.
+
+Tests: 86 Glass tests, 13 Editorial tests and Glass finisher contract test passed.

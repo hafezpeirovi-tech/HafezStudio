@@ -1,8 +1,9 @@
-param([ValidatePattern('^[0-9]{2}$')][string]$Revision = '01')
+param([ValidatePattern('^[0-9]{2}$')][string]$Revision = '01',
+      [ValidatePattern('^[0-9]{8}$')][string]$BuildDate = (Get-Date -Format 'yyyyMMdd'))
 $ErrorActionPreference = 'Stop'
 $editorialRoot = Split-Path -Parent $PSScriptRoot
 $editorialEngine = Join-Path $editorialRoot 'engine'
-$editorialBuild = Join-Path $editorialEngine "editorial-candidate-20260928-$Revision"
+$editorialBuild = Join-Path $editorialEngine "editorial-candidate-$BuildDate-$Revision"
 $editorialPython = Join-Path $env:LOCALAPPDATA 'Programs\Python\Python311\python.exe'
 if (Test-Path -LiteralPath $editorialBuild) { throw 'Candidate already exists; no overwrite.' }
 New-Item -ItemType Directory -Path $editorialBuild | Out-Null
@@ -11,6 +12,7 @@ $editorialBefore = @(Get-ChildItem (Join-Path $editorialEngine 'src\hermes_video
   --distpath (Join-Path $editorialBuild 'dist') --workpath (Join-Path $editorialBuild 'work') --specpath $editorialBuild `
   --paths (Join-Path $editorialEngine 'src\hermes_video') `
   --hidden-import autocut --hidden-import glass_storyboard --hidden-import glass_semantic_cards `
+  --hidden-import glass_motion_roles `
   --add-data "$(Join-Path $editorialEngine 'models');models" `
   --add-data "$(Join-Path $editorialEngine 'src\hermes_video\subtitle_glossary.txt');." `
   --add-data "$(Join-Path $editorialEngine 'src\hermes_video\editorial_source_export.jsx');." `

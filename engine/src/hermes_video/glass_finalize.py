@@ -69,13 +69,12 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
     storyboard=review_meaning(storyboard,manifest['review_segments'])
     (stage/'semantic-storyboard.json').write_text(json.dumps(storyboard,ensure_ascii=False,indent=2),encoding='utf-8')
     requests.write_text(json.dumps(chapter_proposals(markers),ensure_ascii=False,indent=2),encoding='utf-8')
+    from glass_motion_roles import enabled as motion_roles_enabled
     report=assemble_review(manifest_path=source_manifest,xml_path=xml_path,base_plan_path=base_plan,
                            captions_path=captions,requests_path=requests,output_dir=output,
                            project_path=output/'Hafez-Glass-Review.prproj',root=root,include_audio=True,
                            storyboard=storyboard,
-                           # Candidate routing is opt-in until native visual QA passes.
-                           # Never silently replace the owner's approved Editorial style.
-                           motion_roles=os.environ.get('HAFEZ_GLASS_MOTION_ROLES_QA') == '1')
+                           motion_roles=motion_roles_enabled())
     # Fresh chapter timestamps only. Never copy stale timestamps from the old cut.
     chapter_lines=[]
     rate=Fraction(*report['insertions']['fps'])
@@ -92,7 +91,9 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
                  tight_srt=str(output/'Glass-Director.srt'),safe_srt=str(output/'Glass-Director.srt'),
                  youtube=str(youtube),audit=str(output/'assembly-report.json'))
     assembled_plan=json.loads(Path(outputs['professional_plan']).read_text(encoding='utf-8'))
-    if os.environ.get('HAFEZ_EDITORIAL_GLASS') == '1' and not assembled_plan.get('motion_role_policy'):
+    if os.environ.get('HAFEZ_EDITORIAL_GLASS') == '1' and (
+            not assembled_plan.get('motion_role_policy') or
+            any(c.get('layout_mode')=='fullscreen-voice-continuous' for c in assembled_plan['graphics'])):
         from editorial_pipeline import compile_review
         outputs=compile_review(outputs,root=root)
     review_manifest=copy.deepcopy(manifest)
@@ -157,7 +158,8 @@ def validate_review_outputs(manifest, *, root=None):
     ranges=[(s['start_frame'],s['end_frame']) for s in payload['insertions']]
     graphics=[(round(Fraction(str(c['start']))*rate),round(Fraction(str(c['end']))*rate))
               for c in plan['graphics']]
-    continuous={'fullscreen-voice-continuous','numbered-voice-continuous','overlay-voice-continuous'}
+    continuous={'fullscreen-voice-continuous','numbered-voice-continuous','overlay-voice-continuous',
+                'emphasis-voice-continuous'}
     chapter_graphics=[g for g,c in zip(graphics,plan['graphics']) if c.get('layout_mode') not in continuous]
     def layout_tracks_valid(card):
         layers=card['template_layers']

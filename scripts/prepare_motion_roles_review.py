@@ -15,6 +15,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('source',type=Path)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--editorial',action='store_true',help='Compile eligible current-media portrait cards through AE')
     args=parser.parse_args()
     source=args.source.resolve(strict=True);out=args.output.resolve()
     manifest=json.loads((source/'source.edit.json').read_text(encoding='utf-8-sig'))
@@ -29,6 +30,11 @@ def main():
         xml=str(out/'Glass-Director.xml'),professional_plan=str(out/'Glass-Director.premiere-plan.json'),
         tight_srt=str(out/'Glass-Director.srt'),audit=str(out/'assembly-report.json'),
         youtube=str(out/'YouTube-review.md')))
+    if args.editorial:
+        from editorial_pipeline import compile_review
+        plan=json.loads(Path(manifest['outputs']['professional_plan']).read_text(encoding='utf-8'))
+        if any(c.get('layout_mode')=='fullscreen-voice-continuous' for c in plan['graphics']):
+            manifest['outputs']=compile_review(manifest['outputs'],root=ROOT)
     summary=validate_review_outputs(manifest,root=ROOT)
     for name,data in [('motion-review.edit.json',manifest),('engine-validation.json',summary)]:
         (out/name).write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
