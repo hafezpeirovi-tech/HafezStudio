@@ -289,7 +289,7 @@ def finalize_job(args: argparse.Namespace) -> int:
             raise ValueError('Existing Glass review is immutable; use a new job for changed review decisions')
         if getattr(args,'editorial_glass',False):
             current_plan=json.loads(Path(payload['outputs']['professional_plan']).read_text(encoding='utf-8-sig'))
-            if not current_plan.get('editorial_compilation'):
+            if not current_plan.get('editorial_compilation') and not current_plan.get('motion_role_policy'):
                 from editorial_pipeline import upgrade_manifest
                 manifest=upgrade_manifest(manifest)
         summary = validate_job_outputs(manifest)

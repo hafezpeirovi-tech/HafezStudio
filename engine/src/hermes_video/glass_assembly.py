@@ -188,7 +188,7 @@ def chapter_layers(library, fa, en, root):
 
 def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, requests_path,
                     output_dir, project_path, source_sequence=None, root=None, include_audio=False,
-                    storyboard=None):
+                    storyboard=None, motion_roles=False):
     root=Path(root or studio_root()); output=Path(output_dir).resolve()
     project=Path(project_path).resolve()
     if output.exists() or project.parent != output or project.suffix.lower()!='.prproj':
@@ -238,13 +238,18 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
                              end=float(Fraction(slot['end_frame'])/rate),chapter_source=chapter,
                              template_layers=chapter_layers(library,chapter['quote_fa'],chapter['title_en'],root)))
     from glass_semantic_cards import select_cutaways, cutaway_layers
-    cutaways, blocked_cutaways = select_cutaways(storyboard or {},mapped_word_spans(context),mapping,
+    if motion_roles:
+        from glass_motion_roles import select_roles, role_layers, PROTOCOL
+        selector = select_roles
+    else:
+        selector = select_cutaways
+    cutaways, blocked_cutaways = selector(storyboard or {},mapped_word_spans(context),mapping,
         occupied=[(s['start_frame'],s['end_frame']) for s in mapping.payload()['insertions']])
     for card in cutaways:
         graphics.append(dict(id=card['id'],start=float(Fraction(card['start_frame'])/rate),
             end=float(Fraction(card['end_frame'])/rate),semantic_source=card,
-            layout_mode='fullscreen-voice-continuous',
-            template_layers=cutaway_layers(library,card['display_text'],root)))
+            layout_mode=card['layout_mode'], motion_role=card.get('motion_role','semantic-title'),
+            template_layers=role_layers(library,card,root) if motion_roles else cutaway_layers(library,card['display_text'],root)))
     graphics.sort(key=lambda c:c['start'])
     plan=dict(protocol='hermes-professional-edit-v2',style_pack='glass',purpose='isolated-native-qa',
               expected_project_path=str(project),sequence=seq_name,fps=float(rate),palette=DEFAULT_PALETTE,
@@ -257,6 +262,18 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
               audio_policy=dict(voice_untouched_by_ducking=True,ducking_target='background-music-only',
                                 background_music_present=False,ducking_applied=False),
               review_required=['ABAR native rendering','chapter listening/semantic review','native timing/compositing QA','curated music/SFX'])
+    if motion_roles:
+        plan['motion_role_policy'] = PROTOCOL
+        from editorial_contract import PALETTE
+        from glass_pack import palette_values
+        plan['palette'] = copy.deepcopy(PALETTE)
+        colors = palette_values(PALETTE)
+        for cue in plan['graphics']:
+            cue.setdefault('motion_role','chapter')
+            for layer in cue['template_layers']:
+                layer['palette_id'] = PALETTE['id']
+                for binding in layer['typed_controls']:
+                    if binding['kind']=='color': binding['value']=colors[binding['paletteToken']]
     validate_plan(plan,library,qa=True,root=root)
     after={str(p):sha256(p) for p in paths}
     if before!=after:raise RuntimeError('Input changed during assembly')
@@ -266,7 +283,7 @@ def assemble_review(*, manifest_path, xml_path, base_plan_path, captions_path, r
                 selected_chapters=chosen,rejected_chapters=rejected,inputs_sha256=before,
                 selected_cutaways=cutaways,rejected_cutaways=blocked_cutaways,
                 original_subtitle_cues=len(captions),output_subtitle_cues=len(mapped_captions),
-                native_mogrt_instances_planned=len(graphics)*2,native_instances_inserted=0,
+                native_mogrt_instances_planned=sum(len(c['template_layers']) for c in graphics),native_instances_inserted=0,
                 original_files_changed=False,publication_ready=False)
     output.mkdir(parents=True)
     (output/'editorial-candidates.json').write_text(json.dumps(editorial,ensure_ascii=False,indent=2),encoding='utf-8')

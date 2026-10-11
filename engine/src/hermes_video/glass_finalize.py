@@ -72,7 +72,10 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
     report=assemble_review(manifest_path=source_manifest,xml_path=xml_path,base_plan_path=base_plan,
                            captions_path=captions,requests_path=requests,output_dir=output,
                            project_path=output/'Hafez-Glass-Review.prproj',root=root,include_audio=True,
-                           storyboard=storyboard)
+                           storyboard=storyboard,
+                           # Candidate routing is opt-in until native visual QA passes.
+                           # Never silently replace the owner's approved Editorial style.
+                           motion_roles=os.environ.get('HAFEZ_GLASS_MOTION_ROLES_QA') == '1')
     # Fresh chapter timestamps only. Never copy stale timestamps from the old cut.
     chapter_lines=[]
     rate=Fraction(*report['insertions']['fps'])
@@ -88,7 +91,8 @@ def finalize_review(*, manifest_path, manifest, director_variant, events, camera
                  srt=str(output/'Glass-Director.srt'),
                  tight_srt=str(output/'Glass-Director.srt'),safe_srt=str(output/'Glass-Director.srt'),
                  youtube=str(youtube),audit=str(output/'assembly-report.json'))
-    if os.environ.get('HAFEZ_EDITORIAL_GLASS') == '1':
+    assembled_plan=json.loads(Path(outputs['professional_plan']).read_text(encoding='utf-8'))
+    if os.environ.get('HAFEZ_EDITORIAL_GLASS') == '1' and not assembled_plan.get('motion_role_policy'):
         from editorial_pipeline import compile_review
         outputs=compile_review(outputs,root=root)
     review_manifest=copy.deepcopy(manifest)
@@ -153,9 +157,12 @@ def validate_review_outputs(manifest, *, root=None):
     ranges=[(s['start_frame'],s['end_frame']) for s in payload['insertions']]
     graphics=[(round(Fraction(str(c['start']))*rate),round(Fraction(str(c['end']))*rate))
               for c in plan['graphics']]
-    chapter_graphics=[g for g,c in zip(graphics,plan['graphics']) if c.get('layout_mode')!='fullscreen-voice-continuous']
+    continuous={'fullscreen-voice-continuous','numbered-voice-continuous','overlay-voice-continuous'}
+    chapter_graphics=[g for g,c in zip(graphics,plan['graphics']) if c.get('layout_mode') not in continuous]
     def layout_tracks_valid(card):
         layers=card['template_layers']
+        if card.get('layout_mode')=='overlay-voice-continuous':
+            return len(layers)==1 and layers[0]['track']==3 and card.get('motion_role')=='emphasis'
         if any('compiled_binding' in layer for layer in layers):
             return (card.get('layout_mode')=='fullscreen-voice-continuous' and
                     len(layers)==1 and layers[0]['track']==3)
@@ -166,7 +173,7 @@ def validate_review_outputs(manifest, *, root=None):
         if not 0<=a<b<=mapping.output_duration or (i and a<graphics[i-1][1]):
             raise ValueError('Overlapping/out-of-range Glass cards')
         card=plan['graphics'][i]
-        if card.get('layout_mode')=='fullscreen-voice-continuous':
+        if card.get('layout_mode') in continuous:
             evidence=card.get('semantic_source',{})
             if (evidence.get('start_frame'),evidence.get('end_frame'))!=(a,b) or not evidence.get('source_word_ids'):
                 raise ValueError('Unbound semantic card')
@@ -203,4 +210,6 @@ def validate_review_outputs(manifest, *, root=None):
                 xml=str(xml_path),plan=str(plan_path),srt=str(srt_path),youtube=outputs.get('youtube'),
                 expectedProject=plan['expected_project_path'],
                 editorialCompiled=len(plan.get('editorial_compilation',{}).get('compiled_cue_ids',[])),
+                motionRoleCounts={role:sum(c.get('motion_role','legacy')==role for c in plan['graphics'])
+                                  for role in sorted({c.get('motion_role','legacy') for c in plan['graphics']})},
                 finisher='Create the exact separate review project, import XML, bind its sequence ID and apply the typed Glass plan. Never export automatically.')
